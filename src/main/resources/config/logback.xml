@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE XML>
+<configuration>
+    <contextName>Duck</contextName>
+
+    <!-- ============================= APPENDERS ============================= -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>${CATALINA_HOME}/logs/duck.log</file>
+        <encoder>
+            <pattern>%date{HH:mm:ss.SSS} %level %logger{10} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- ========================== MYBATIS LOGGERS ========================== -->
+    <logger name="com.magistr.duck.dao.mybatis.mappers" level="OFF" />
+    <logger name="org.apache.ibatis" level="OFF" />
+    <logger name="org.mybatis.spring" level="OFF" />
+
+    <!-- ============================ ROOT LOGGER ============================ -->
+    <root level="debug">
+        <appender-ref ref="FILE" />
+    </root>
+</configuration>

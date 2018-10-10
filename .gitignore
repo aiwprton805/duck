@@ -1,0 +1,11 @@
+/.classpath
+/.project
+/gradle.properties
+/project.properties
+
+/.externalToolBuilders/**
+/.git/**
+/.gradle/**
+/.settings/**
+/bin/**
+/build/**

@@ -1,0 +1,60 @@
+ <beans:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!-- ========================= HTTP SECURE SETTINGS ========================= -->
+    <http>
+        <intercept-url pattern="/index/**" access="isAnonymous()" />
+        <intercept-url pattern="/login/**" access="isAnonymous()" />
+        <intercept-url pattern="/registration/**" access="isAnonymous()" />
+        <intercept-url pattern="/**" access="hasRole('user')" />
+        <form-login login-page="/login" login-processing-url="/login/sign_in"
+            authentication-failure-url="/login?error=true" default-target-url="/profile"
+            username-parameter="name" password-parameter="password" />
+        <logout logout-url="/logout" logout-success-url="/login" delete-cookies="JSESSIONID" />
+        <anonymous />
+        <csrf token-repository-ref="csrfTokenRepository" />
+        <access-denied-handler error-page="/error/access_denied" />
+        <remember-me remember-me-parameter="remember_me" token-validity-seconds="2419200"
+            token-repository-ref="rememberMeTokenRepository" />
+    </http>
+
+    <!-- ======================== AUTHENTICATION MANAGER ======================== -->
+    <authentication-manager id="authManager">
+        <authentication-provider user-service-ref="userDetailsServiceImpl">
+            <password-encoder ref="passwordEncoder" />
+        </authentication-provider>
+    </authentication-manager>
+
+    <!-- ========================= SET EMPTY ROLE PREFIX ======================== -->
+    <beans:bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
+        <beans:constructor-arg>
+            <beans:list>
+                <beans:bean class="org.springframework.security.access.vote.AuthenticatedVoter" />
+                <beans:bean class="org.springframework.security.access.vote.RoleVoter">
+                    <beans:property name="rolePrefix" value="" />
+                </beans:bean>
+                <beans:bean class="org.springframework.security.web.access.expression.WebExpressionVoter" />
+            </beans:list>
+        </beans:constructor-arg>
+    </beans:bean>
+
+    <beans:bean id="grantedAuthorityDefaults" class="org.springframework.security.config.core.GrantedAuthorityDefaults">
+        <beans:constructor-arg value="" />
+    </beans:bean>
+
+    <!-- ================================= BEANS ================================ -->
+    <beans:bean id="userDetailsServiceImpl" class="com.magistr.duck.security.impl.UserDetailsServiceImpl" />
+    <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+    <beans:bean id="securityService" class="com.magistr.duck.security.impl.SecurityServiceImpl" />
+    <beans:bean id="csrfTokenRepository" class="org.springframework.security.web.csrf.CookieCsrfTokenRepository" />
+    <beans:bean id="rememberMeTokenRepository"
+        class="org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl">
+        <beans:property name="dataSource" ref="dataSource" />
+    </beans:bean>
+
+</beans:beans>
