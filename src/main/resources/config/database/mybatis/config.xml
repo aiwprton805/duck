@@ -9,11 +9,17 @@
     </settings>
 
     <typeAliases>
-        <typeAlias alias="User" type="com.magistr.duck.entity.User" />
-        <typeAlias alias="Role" type="com.magistr.duck.entity.Role" />
+        <typeAlias alias="User"             type="com.magistr.duck.entity.User" />
+        <typeAlias alias="Role"             type="com.magistr.duck.entity.Role" />
+        <typeAlias alias="Term"             type="com.magistr.duck.entity.Term" />
+        <typeAlias alias="TermInfo"         type="com.magistr.duck.entity.TermInfo" />
+        <typeAlias alias="TermCommonInfo"   type="com.magistr.duck.entity.TermInfo$TermCommonInfo" />
+        <typeAlias alias="Lang"             type="com.magistr.duck.common.enums.Lang" />
     </typeAliases>
 
     <mappers>
-        <mapper resource="config/database/mybatis/mappers/User.xml"/>
+        <mapper resource="config/database/mybatis/mappers/User.xml" />
+        <mapper resource="config/database/mybatis/mappers/Term.xml" />
+        <mapper resource="config/database/mybatis/mappers/TermInfo.xml" />
     </mappers>
 </configuration>

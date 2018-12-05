@@ -6,7 +6,7 @@
 
 <ui:html>
 
-<ui:language />
+<ui:navbar />
 
 <h1>Hello, ${user.name}!</h1>
 <h2>You have roles</h2>
@@ -20,7 +20,7 @@
 
 <c:url var="logout" value="/logout" />
 <form method="POST" action="${logout}">
-    <input type="submit" value=<spring:message code="label.logout" /> />
+    <input type="submit" value=<spring:message code="label.navbar.logout" /> />
     <sec:csrf />
 </form>
 

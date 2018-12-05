@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class ErrorController {
 
-    @RequestMapping("/error/access_denied")
+    @RequestMapping("/error/access_denied.html")
     public String accessDenied() {
         return "error/access_denied";
     }

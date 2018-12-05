@@ -15,7 +15,7 @@ public class ProfileController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/profile")
+    @RequestMapping("/profile.html")
     public String profile(Model model, Principal principal) {
         String username = principal.getName();
         model.addAttribute("user", userService.getUser(username));

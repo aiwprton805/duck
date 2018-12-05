@@ -6,8 +6,8 @@
 
 <ui:html>
 
-<c:url var="sign_up_h" value="/registration/sign_up" />
-<form:form method="POST" action="${sign_up_h}">
+<c:url var="sign_up" value="/registration/sign_up" />
+<form:form method="POST" action="${sign_up}">
     <div>
         <input name="name" type="text" required="required" maxlength="30" size="30" placeholder="login">
     </div>

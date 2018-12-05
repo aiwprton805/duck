@@ -8,11 +8,11 @@
 <h2>This project is union four universities.</h2>
 
 <div>
-    <c:url var="login" value="/login"></c:url>
+    <c:url var="login" value="/login.html"></c:url>
     <a href="${login}">login</a>
 </div>
 <div>
-    <c:url var="registration" value="/registration"></c:url>
+    <c:url var="registration" value="/registration.html"></c:url>
     <a href="${registration}">registration</a>
 </div>
 

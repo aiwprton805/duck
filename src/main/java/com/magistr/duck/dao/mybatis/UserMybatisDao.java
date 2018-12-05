@@ -18,7 +18,7 @@ public class UserMybatisDao extends SqlSessionDaoSupport implements UserDao {
 
     @Override
     public User read(Integer id) {
-        return (User) getSqlSession().selectOne(MAPPER_NAMESPACE + ".read", id);
+        return getSqlSession().selectOne(MAPPER_NAMESPACE + ".read", id);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class UserMybatisDao extends SqlSessionDaoSupport implements UserDao {
 
     @Override
     public User findByName(String name) {
-        return (User) getSqlSession().selectOne(MAPPER_NAMESPACE + ".findByName", name);
+        return getSqlSession().selectOne(MAPPER_NAMESPACE + ".findByName", name);
     }
 
     @Override

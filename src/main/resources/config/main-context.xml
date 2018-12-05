@@ -30,6 +30,8 @@
     </bean>
 
     <bean id="userDao" class="com.magistr.duck.dao.mybatis.UserMybatisDao" parent="dao" />
+    <bean id="termDao" class="com.magistr.duck.dao.mybatis.TermMybatisDao" parent="dao" />
+    <bean id="termInfoDao" class="com.magistr.duck.dao.mybatis.TermInfoMybatisDao" parent="dao" />
 
     <!-- ============================ SERVICE ============================ -->
     

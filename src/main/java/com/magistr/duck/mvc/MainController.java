@@ -21,17 +21,17 @@ public class MainController {
     @Autowired
     private SecurityService securityService;
 
-    @RequestMapping("/index")
+    @RequestMapping("/index.html")
     public String index() {
         return "index";
     }
 
-    @RequestMapping("/login")
+    @RequestMapping("/login.html")
     public String login() {
         return "login";
     }
 
-    @RequestMapping("/registration")
+    @RequestMapping("/registration.html")
     public String registration() {
         return "registration";
     }
@@ -46,7 +46,7 @@ public class MainController {
         userService.saveUser(user, password);
         securityService.autoLogin(request, name, password);
 
-        return "redirect:/profile";
+        return "redirect:/profile.html";
     }
 
 }

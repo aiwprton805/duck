@@ -8,17 +8,17 @@
 
     <!-- ========================= HTTP SECURE SETTINGS ========================= -->
     <http>
-        <intercept-url pattern="/index/**" access="isAnonymous()" />
-        <intercept-url pattern="/login/**" access="isAnonymous()" />
-        <intercept-url pattern="/registration/**" access="isAnonymous()" />
-        <intercept-url pattern="/**" access="hasRole('user')" />
-        <form-login login-page="/login" login-processing-url="/login/sign_in"
-            authentication-failure-url="/login?error=true" default-target-url="/profile"
+        <intercept-url pattern="/index*/**" access="isAnonymous()" />
+        <intercept-url pattern="/login*/**" access="isAnonymous()" />
+        <intercept-url pattern="/registration*/**" access="isAnonymous()" />
+        <intercept-url pattern="/**.html" access="hasRole('user')" />
+        <form-login login-page="/login.html" login-processing-url="/login/sign_in"
+            authentication-failure-url="/login.html?error=true" default-target-url="/profile.html"
             username-parameter="name" password-parameter="password" />
-        <logout logout-url="/logout" logout-success-url="/login" delete-cookies="JSESSIONID" />
+        <logout logout-url="/logout" logout-success-url="/login.html" delete-cookies="JSESSIONID" />
         <anonymous />
         <csrf token-repository-ref="csrfTokenRepository" />
-        <access-denied-handler error-page="/error/access_denied" />
+        <access-denied-handler error-page="/error/access_denied.html" />
         <remember-me remember-me-parameter="remember_me" token-validity-seconds="2419200"
             token-repository-ref="rememberMeTokenRepository" />
     </http>
