@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magistr.duck.dao.mybatis.mappers.TermMapper">
+    <!-- ============================== RESULT MAP ============================== -->
+    <resultMap type="Term" id="termResult">
+        <id property="id" column="id" />
+        <!-- result property="lang" javaType="Lang" / -->
+        <result property="name" column="name" />
+        <association property="translation"  resultMap="termResult" columnPrefix="trnsl_" />
+        <association property="termInfo"
+            resultMap="com.magistr.duck.dao.mybatis.mappers.TermInfoMapper.termInfoResult" columnPrefix="ti_" />
+    </resultMap>
+
+    <!-- ======================== SELECT ALL RU TERMS SQL ======================= -->
+    <sql id="selectAllRuTerms">
+        SELECT
+            tr.id AS id,
+            tr.name AS name,
+            td.id AS trnsl_id,
+            td.name AS trnsl_name
+        FROM @{jdbc.schema}.terms_ru tr
+        LEFT JOIN @{jdbc.schema}.terms_de td ON td.id = tr.term_de_id
+    </sql>
+
+    <!-- ======================== SELECT ALL DE TERMS SQL ======================= -->
+    <sql id="selectAllDeTerms">
+        SELECT
+            td.id AS id,
+            td.name AS name,
+            tr.id AS trnsl_id,
+            tr.name AS trnsl_name
+        FROM @{jdbc.schema}.terms_de td
+        LEFT JOIN @{jdbc.schema}.terms_ru tr ON tr.id = td.term_ru_id
+    </sql>
+
+    <!-- ========================== CREATE TRANSLATION ========================== -->
+    <insert id="createTranslation" parameterType="Term">
+        <selectKey keyProperty="id" keyColumn="id" resultType="int" order="BEFORE">
+            <choose>
+                <when test="lang == @com.magistr.duck.common.enums.Lang@RU">
+                    INSERT INTO @{jdbc.schema}.terms_ru(name, term_info_id)
+                </when>
+                <when test="lang == @com.magistr.duck.common.enums.Lang@DE">
+                    INSERT INTO @{jdbc.schema}.terms_de(name, term_info_id)
+                </when>
+            </choose>
+            VALUES (#{name}, #{termInfo.id}) RETURNING id;
+        </selectKey>
+    </insert>
+
+    <!-- ================================ CREATE ================================ -->
+    <insert id="create" parameterType="Term">
+        <selectKey keyProperty="id" keyColumn="id" resultType="int" order="BEFORE">
+            <choose>
+                <when test="lang == @com.magistr.duck.common.enums.Lang@RU">
+                    INSERT INTO @{jdbc.schema}.terms_ru(name, term_de_id, term_info_id)
+                </when>
+                <when test="lang == @com.magistr.duck.common.enums.Lang@DE">
+                    INSERT INTO @{jdbc.schema}.terms_de(name, term_ru_id, term_info_id)
+                </when>
+            </choose>
+            VALUES (#{name}, #{translation.id}, #{termInfo.id}) RETURNING id;
+        </selectKey>
+
+        <choose>
+            <when test="lang == @com.magistr.duck.common.enums.Lang@RU">
+                UPDATE @{jdbc.schema}.terms_de
+                SET term_ru_id = #{id}
+            </when>
+            <when test="lang == @com.magistr.duck.common.enums.Lang@DE">
+                UPDATE @{jdbc.schema}.terms_ru
+                SET term_de_id = #{id}
+            </when>
+        </choose>
+        WHERE id = #{translation.id};
+    </insert>
+
+    <!-- ================================= READ ================================= -->
+    <select id="read" parameterType="map" resultMap="termResult">
+        <choose>
+            <when test="lang == @com.magistr.duck.common.enums.Lang@RU">
+                <include refid="selectAllRuTerms" />
+                WHERE tr.id = #{id}
+            </when>
+            <when test="lang == @com.magistr.duck.common.enums.Lang@DE">
+                <include refid="selectAllDeTerms" />
+                WHERE td.id = #{id}
+            </when>
+        </choose>
+    </select>
+
+    <!-- ================================ UPDATE ================================ -->
+    <update id="update" parameterType="Term">
+        <choose>
+            <when test="lang == @com.magistr.duck.common.enums.Lang@RU">
+                UPDATE @{jdbc.schema}.terms_ru
+            </when>
+            <when test="lang == @com.magistr.duck.common.enums.Lang@DE">
+                UPDATE @{jdbc.schema}.terms_de
+            </when>
+        </choose>
+
+        <set>
+            <if test="name != null">name = #{name}</if>
+        </set>
+        WHERE id = #{id};
+
+        <choose>
+            <when test="lang == @com.magistr.duck.common.enums.Lang@RU">
+                UPDATE @{jdbc.schema}.terms_de
+            </when>
+            <when test="lang == @com.magistr.duck.common.enums.Lang@DE">
+                UPDATE @{jdbc.schema}.terms_ru
+            </when>
+        </choose>
+
+        <set>
+            <if test="translation.name != null">name = #{tranlation.name}</if>
+        </set>
+        WHERE id = #{translation.id};
+    </update>
+
+    <!-- ================================ DELETE ================================ -->
+    <delete id="delete" parameterType="map">
+        <choose>
+            <when test="lang == @com.magistr.duck.common.enums.Lang@RU">
+                DELETE FROM @{jdbc.schema}.terms_ru WHERE id = #{id};
+            </when>
+            <when test="lang == @com.magistr.duck.common.enums.Lang@DE">
+                DELETE FROM @{jdbc.schema}.terms_de WHERE id = #{id};
+            </when>
+        </choose>
+    </delete>
+
+    <!-- ============================= FIND BY NAME ============================= -->
+    <select id="findByName" parameterType="map" resultMap="termResult">
+        <choose>
+            <when test="lang == @com.magistr.duck.common.enums.Lang@RU">
+                <include refid="selectAllRuTerms" />
+                WHERE tr.name = #{name};
+            </when>
+            <when test="lang == @com.magistr.duck.common.enums.Lang@DE">
+                <include refid="selectAllDeTerms" />
+                WHERE td.name = #{name};
+            </when>
+        </choose>
+    </select>
+
+    <!-- =============================== FIND ALL =============================== -->
+    <select id="findAll" parameterType="Lang" resultMap="termResult">
+        <choose>
+            <when test="_parameter == @com.magistr.duck.common.enums.Lang@RU">
+                <include refid="selectAllRuTerms" />
+                ORDER BY tr.name;
+            </when>
+            <when test="_parameter == @com.magistr.duck.common.enums.Lang@DE">
+                <include refid="selectAllDeTerms" />
+                ORDER BY td.name;
+            </when>
+        </choose>
+    </select>
+</mapper>
+
