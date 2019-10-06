@@ -4,161 +4,60 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@taglib uri="duck.magistr.com/jsp/taglib/functions" prefix="f"%>
 
 <ui:html title="title.term">
-
-<ui:navbar />
-
-<div class="container mt-4 mb-2">
-    <div class="row justify-content-between">
-        <div class="col-auto mr-auto">
-            <h2><spring:message code="label.navbar.term" /></h2>
-        </div>
-        <div class="col-auto">
-            <c:url value="/term/edit.html" var="newTerm" />
-            <form:form method="POST" action="${newTerm}">
-                <button class="btn btn-outline-primary" type="submit">
-                    <spring:message code="label.term.newterm" />
-                </button>
-            </form:form>
-        </div>
-    </div>
-</div>
-
-<div class="container">
-    <form id="searchForm">
-        <div class="form-row justify-content-between">
-            <div class="col-4">
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text p-0 m-0">
-                            <img src='<c:url value="/static/img/flag-de.png" />' alt="">
-                        </div>
-                    </div>
-                    <input class="form-control" id="deSearch" type="search"
-                        placeholder='<spring:message code="label.term.search" />'>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text p-0 m-0">
-                            <img src='<c:url value="/static/img/flag-ru.png" />' alt="">
-                        </div>
-                    </div>
-                    <input class="form-control" id="ruSearch" type="search"
-                        placeholder='<spring:message code="label.term.search" />'>
-                </div>
-            </div>
-            <div class="col-auto ml-auto">
-                <button class="btn btn-light" id="searchButton" type="submit">
-                    <spring:message code="label.term.search" />
-                </button>
-            </div>
-        </div>
-    </form>
-</div>
-
-<div class="container">
-    <div class="card border-primary mb-3">
-        <div class="card-header"><h5><spring:message code="label.term.translation" /></h5></div>
-        <div class="card-body">
-            <table class="table table-bordered table-striped" id="termTable">
-                <thead class="thead-light">
-                    <tr>
-                        <th scope="col">Deutsch</th>
-                        <th scope="col">Русский</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- AJAX GENERATE -->
-                    <c:forEach var="term" items="${terms}">
-                        <tr>
-                            <td>${term.name}</td>
-                            <td>${term.translation.name}</td>
-                        </tr>
+    <ui:navbar />
+    <%-- MODEL ATTR: group, termMap--%>
+    <div class="container">
+        <table class="table table-sm">
+            <tbody>
+            <tr class="table-primary">
+                <th scope="row" style="width: 50%">Terminus</th><th scope="row" style="width: 50%">Термин</th>
+            </tr>
+            <tr>
+                <td>Deutsch</td><td>Русский</td>
+            </tr>
+            <tr>
+                <td>${termMap.get("DE").name}<br>${termMap.get("DE").grammar}</td><td>${termMap.get("RU").name}<br>${termMap.get("RU").grammar}</td>
+            </tr>
+            <tr class="table-primary">
+                <th scope="row">Fachgebiet</th><th scope="row">Область</th>
+            </tr>
+            <tr>
+                <td>${not empty termMap.get("DE").area ? termMap.get("DE").area : ""}</td><td>${not empty termMap.get("RU").area ? termMap.get("RU").area : ""}</td>
+            </tr>
+            <tr class="table-primary">
+                <th scope="row">Kurzdefinition</th><th scope="row">Краткое определение</th>
+            </tr>
+            <tr>
+                <td>${not empty termMap.get("DE").description ? termMap.get("DE").description : ""}</td><td>${not empty termMap.get("RU").description ? termMap.get("RU").description : ""}</td>
+            </tr>
+            <tr class="table-primary">
+                <th scope="row">Bilder</th><th scope="row">Картинки</th>
+            </tr>
+            <tr>
+                <td><%-- !!!!!!!!!!!!!!! IMAGES !!!!!!!!!!!!!!! --%></td>
+            </tr>
+            <tr class="table-primary">
+                <th scope="row">Biespiele</th><th scope="row">Примеры</th>
+            </tr>
+            <c:set var="examples" value="${f:termGroupExamples(group)}" />
+            <c:forEach var="row" items="${examples}">
+                <tr>
+                    <c:forEach var="column" items="${row}">
+                        <td>${column}</td>
                     </c:forEach>
-                </tbody>
-            </table>
-        </div>
+                </tr>
+            </c:forEach>
+            <tr class="table-primary">
+                <th scope="row">Autor(en) des Eintrags</th><th scope="row">Авторы</th>
+            </tr>
+            <tr>
+                <td>${group.author}</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-</div>
-
-
-
-<c:url var="send" value="/term/send" />
-<form:form method="POST" action="${send}" modelAttribute="term">
-    <div>
-        <form:label path="name">Term RU</form:label>
-        <form:input path="name"/>
-    </div>
-    <div>
-        <form:label path="translation.name">Term DE</form:label>
-        <form:input path="translation.name"/>
-    </div>
-    <div>
-        <form:label path="termInfo.grammar">Grammar RU</form:label>
-        <form:input path="termInfo.grammar"/>
-    </div>
-    <div>
-        <form:label path="translation.termInfo.grammar">Grammar DE</form:label>
-        <form:input path="translation.termInfo.grammar"/>
-    </div>
-    <div>
-        <input type="submit" value="send form" />
-    </div>
-    <sec:csrf />
-</form:form>
 
 </ui:html>
-
-<c:url value="/term/search" var="search" />
-<script>
-    jQuery(document).ready(function($) {
-        $("#searchForm").submit(function(event) {
-            enableSearchButton(false);
-            event.preventDefault();
-            searchRequest();
-        });
-    });
-
-    function searchRequest() {
-        let search = {
-            "deTerm" : $("#deSearch").val(),
-            "ruTerm" : $("#ruSearch").val()
-        }
-
-        const token = "${_csrf.token}";
-        const header = "${_csrf.headerName}";
-
-        $(document).ajaxSend(function(e,xhr,options) {
-            xhr.setRequestHeader(header, token);
-        });
-        $.ajax({
-            type : "POST",
-            accept: "application/json",
-            contentType : "application/json",
-            url : "${search}",
-            data : JSON.stringify(search),
-            dataType : "json",
-            success : function(data) {
-                display(data);
-            },
-            done : function(e) {
-                enableSearchButton(true);
-            }
-        });
-    }
-
-    function enableSearchButton(flag) {
-        $("#searchButton").prop("disabled", flag);
-    }
-
-    function display(data) {
-        $('#termTable tbody').empty();
-        let tableBody = $('#termTable').find('tbody');
-        $.each(data, function(key, value){
-            tableBody.append($('<tr>').append('<td>' + key + '</td>').append('<td>' + value + '</td>'));
-        });
-    }
-</script>

@@ -10,6 +10,9 @@
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
+    <listener>
+        <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+    </listener>
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
@@ -20,9 +23,15 @@
         <servlet-name>dispatcher</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
-            <param-name>namespace</param-name>
-            <param-value>classes/config/mvc-context</param-value>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:/config/mvc-context.xml</param-value>
         </init-param>
+        <multipart-config>
+            <location>G:\Duck Temp Storage\multipart-data</location>
+            <max-file-size>10485760</max-file-size><!-- 10MB (in bytes) -->
+            <max-request-size>20971520</max-request-size><!-- 20MB (in bytes) -->
+            <file-size-threshold>15728640</file-size-threshold><!-- 15MB (in bytes) -->
+        </multipart-config>
     </servlet>
 
     <servlet-mapping>
@@ -60,4 +69,3 @@
     </filter-mapping>
 
 </web-app>
-

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magistr.duck.dao.TokenDao">
+    <!-- ============================== RESULT MAP ============================== -->
+    <resultMap type="Token" id="tokenResult">
+        <id property="hash" column="hash" />
+        <result property="duration" column="duration" />
+    </resultMap>
+
+    <!-- ======================== SELECT ALL TOKENS SQL ========================= -->
+    <sql id="selectAllTokens">
+        SELECT
+            tok.hash AS hash,
+            tok.duration AS duration
+        FROM @{jdbc.schema}.tokens tok
+    </sql>
+
+    <!-- ================================ CREATE ================================ -->
+    <insert id="create" parameterType="Token">
+        INSERT INTO @{jdbc.schema}.tokens(hash, duration)
+        VALUES (#{hash}, #{duration});
+    </insert>
+
+    <!-- ================================= READ ================================= -->
+    <select id="read" parameterType="string" resultMap="tokenResult">
+        <include refid="selectAllTokens" />
+        WHERE tok.hash = #{hash};
+    </select>
+
+    <!-- ================================ UPDATE ================================ -->
+    <update id="update" parameterType="Token">
+        UPDATE @{jdbc.schema}.tokens
+        <set>
+            <if test="duration != null">duration = #{duration}</if>
+        </set>
+        WHERE hash = #{hash};
+    </update>
+
+    <!-- ================================ DELETE ================================ -->
+    <delete id="delete" parameterType="string">
+        DELETE FROM @{jdbc.schema}.tokens WHERE hash = #{hash};
+    </delete>
+
+    <delete id="deleteOverTime">
+        DELETE FROM @{jdbc.schema}.tokens
+        WHERE duration &lt; LOCALTIMESTAMP(0);
+    </delete>
+
+    <!-- =============================== FIND ALL =============================== -->
+    <select id="findAll" resultMap="tokenResult">
+        <include refid="selectAllTokens" />;
+    </select>
+</mapper>

@@ -1,15 +1,15 @@
 package com.magistr.duck.dao.mybatis;
 
-import java.util.List;
-
-import org.mybatis.spring.support.SqlSessionDaoSupport;
-
 import com.magistr.duck.dao.UserDao;
 import com.magistr.duck.entity.User;
+import org.mybatis.spring.support.SqlSessionDaoSupport;
+
+import java.util.List;
+import java.util.Optional;
 
 public class UserMybatisDao extends SqlSessionDaoSupport implements UserDao {
 
-    private static final String MAPPER_NAMESPACE = "com.magistr.duck.dao.mybatis.mappers.UserMapper";
+    private static final String MAPPER_NAMESPACE = "com.magistr.duck.dao.UserDao";
 
     @Override
     public void create(User user) {
@@ -17,8 +17,8 @@ public class UserMybatisDao extends SqlSessionDaoSupport implements UserDao {
     }
 
     @Override
-    public User read(Integer id) {
-        return getSqlSession().selectOne(MAPPER_NAMESPACE + ".read", id);
+    public Optional<User> read(Integer id) {
+        return Optional.ofNullable(getSqlSession().selectOne(MAPPER_NAMESPACE + ".read", id));
     }
 
     @Override
@@ -32,8 +32,8 @@ public class UserMybatisDao extends SqlSessionDaoSupport implements UserDao {
     }
 
     @Override
-    public User findByName(String name) {
-        return getSqlSession().selectOne(MAPPER_NAMESPACE + ".findByName", name);
+    public Optional<User> findByName(String name) {
+        return Optional.ofNullable(getSqlSession().selectOne(MAPPER_NAMESPACE + ".findByName", name));
     }
 
     @Override
@@ -42,3 +42,4 @@ public class UserMybatisDao extends SqlSessionDaoSupport implements UserDao {
     }
 
 }
+//class

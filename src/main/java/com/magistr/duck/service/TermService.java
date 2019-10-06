@@ -1,32 +1,54 @@
 package com.magistr.duck.service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import com.magistr.duck.common.enums.Lang;
+import com.magistr.duck.common.enums.TermStatus;
+import com.magistr.duck.entity.Profile;
 import com.magistr.duck.entity.Term;
-import com.magistr.duck.entity.TermInfo;
+import com.magistr.duck.entity.TermGroup;
 
 public interface TermService {
 
-    Term getTerm(Integer id, Lang lang);
+    Optional<Term> getTerm(Integer id);
 
-    Term getTerm(String name, Lang lang);
+    Optional<Term> getTerm(String name, Lang lang);
 
-    TermInfo getTermInfo(Term term);
+    Optional<Term> getTerm(Term term);
 
-    TermInfo getTermInfo(Integer termId, Lang lang);
+    Optional<TermGroup> getTermGroup(Integer id);
 
-    TermInfo getTermInfo(String termName, Lang lang);
+    Optional<TermGroup> getTermGroup(Term term);
 
-    List<Term> getTerms(Lang lang);
+    Optional<TermGroup> getTermGroup(TermGroup termGroup);
 
     void saveTerm(Term term);
 
-    void saveTermInfo(TermInfo termInfo);
+    void saveTermGroup(TermGroup termGroup);
 
-    void clearTermInfo(TermInfo termInfo);
+    void removeTerm(Integer id);
 
     void removeTerm(Term term);
 
-    void removeTerm(Integer id, Lang lang);
+    void removeTermGroup(Integer id);
+
+    void removeTermGroup(TermGroup termGroup);
+
+    List<Term> getTerms();
+
+    List<Term> getTerms(TermStatus status);
+
+    List<Term> getTerms(Profile profile);
+
+    List<Term> getTerms(Profile profile, TermStatus status);
+
+    List<Term> getTerms(Profile profile, Lang lang);
+
+    List<TermGroup> getTermGroups();
+
+    List<TermGroup> getLastCompletedTermGroups();
+
+    Map<String, Term> termGroupToTermMap(TermGroup termGroup);
 }

@@ -4,9 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import com.magistr.duck.entity.User;
 import com.magistr.duck.security.SecurityService;
@@ -15,28 +13,32 @@ import com.magistr.duck.service.UserService;
 @Controller
 public class MainController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    private final SecurityService securityService;
 
     @Autowired
-    private SecurityService securityService;
+    public MainController(UserService userService, SecurityService securityService) {
+        this.userService = userService;
+        this.securityService = securityService;
+    }
 
-    @RequestMapping("/index.html")
+    @GetMapping({"", "/", "/index"})
     public String index() {
         return "index";
     }
 
-    @RequestMapping("/login.html")
+    @GetMapping("/login")
     public String login() {
         return "login";
     }
 
-    @RequestMapping("/registration.html")
+    @GetMapping("/registration")
     public String registration() {
         return "registration";
     }
 
-    @RequestMapping(path = "/registration/sign_up", method = RequestMethod.POST)
+    @PostMapping(path = "/registration/signup")
     public String registration(@RequestParam String name, @RequestParam CharSequence password,
             @RequestParam CharSequence retypePassword, HttpServletRequest request) {
 
@@ -46,7 +48,7 @@ public class MainController {
         userService.saveUser(user, password);
         securityService.autoLogin(request, name, password);
 
-        return "redirect:/profile.html";
+        return "redirect:/profile";
     }
 
 }

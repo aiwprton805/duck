@@ -1,12 +1,14 @@
 package com.magistr.duck.dao;
 
+import java.util.Optional;
+
 public interface CrudDao<ID, T> extends Dao<T> {
 
-    void create(T obj);
+    void create(T entity);
 
-    T read(ID id);
+    Optional<T> read(ID id);
 
-    void update(T obj);
+    void update(T entity);
 
     void delete(ID id);
 }

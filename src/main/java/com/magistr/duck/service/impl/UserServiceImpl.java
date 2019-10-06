@@ -1,6 +1,7 @@
 package com.magistr.duck.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,21 +17,25 @@ import com.magistr.duck.service.UserService;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+
+    private final UserDao userDao;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserDao userDao;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder) {
+        this.userDao = userDao;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
-    public User getUser(Integer id) {
+    public Optional<User> getUser(Integer id) {
         return userDao.read(id);
     }
 
     @Override
-    public User getUser(String name) {
+    public Optional<User> getUser(String name) {
         return userDao.findByName(name);
     }
 
@@ -40,20 +45,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveUser(User user, CharSequence password) {
-        if (password != null) {
-            user.setPassword(passwordEncoder.encode(password));
-        }
-
-        var dbUser = userDao.findByName(user.getName());
-        if (dbUser == null) {
-            List<Role> roles = List.of(new Role("user"));
+    public void saveUser(User user) {
+        var optUser = userDao.findByName(user.getName());
+        if(optUser.isEmpty()){
+            List<Role> roles = List.of(new Role("guest"));
             user.setRoles(roles);
             userDao.create(user);
         } else {
             userDao.update(user);
         }
-        logger.debug("saveUser: {}", user);
+        LOGGER.debug("saveUser: {}", user);
+    }
+
+    @Override
+    public void saveUser(User user, CharSequence password) {
+        if (password != null) {
+            user.setPassword(passwordEncoder.encode(password));
+        }
+        saveUser(user);
     }
 
     @Override
@@ -62,3 +71,4 @@ public class UserServiceImpl implements UserService {
     }
 
 }
+//class

@@ -2,10 +2,13 @@
 /.project
 /gradle.properties
 /project.properties
+/Duck.iml
 
 /.externalToolBuilders/**
 /.git/**
 /.gradle/**
+/.idea/**
 /.settings/**
 /bin/**
+/out/**
 /build/**

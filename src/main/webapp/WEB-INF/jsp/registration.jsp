@@ -1,13 +1,13 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib tagdir="/WEB-INF/tags" prefix="ui"%>
-<%@taglib tagdir="/WEB-INF/tags/security" prefix="sec"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <ui:html>
 
-<c:url var="sign_up" value="/registration/sign_up" />
-<form:form method="POST" action="${sign_up}">
+<c:url var="signup" value="/registration/signup" />
+<form:form method="POST" action="${signup}">
     <div>
         <input name="name" type="text" required="required" maxlength="30" size="30" placeholder="login">
     </div>
@@ -20,7 +20,7 @@
     <div>
         <input type="submit" value="sign up">
     </div>
-    <sec:csrf />
+    <sec:csrfInput/>
 </form:form>
 
 </ui:html>

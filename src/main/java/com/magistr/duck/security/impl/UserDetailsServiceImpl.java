@@ -20,11 +20,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private UserService userService;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var user = userService.getUser(username);
-        if (user == null) {
-            throw new UsernameNotFoundException(username);
-        }
+    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
+        var optUser = userService.getUser(username);
+        var user = optUser.orElseThrow(() -> new UsernameNotFoundException(username));
 
         Collection<GrantedAuthority> authorities = user.getRoles().stream()
                 .map((Role role) -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());

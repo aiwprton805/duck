@@ -1,121 +1,61 @@
 package com.magistr.duck.mvc;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import com.magistr.duck.common.enums.Lang;
+import com.magistr.duck.common.utils.Transform;
+import com.magistr.duck.entity.Term;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import com.magistr.duck.common.enums.Lang;
-import com.magistr.duck.entity.Term;
-import com.magistr.duck.entity.TermInfo;
+import com.magistr.duck.entity.TermGroup;
 import com.magistr.duck.service.TermService;
 
 @Controller
+@RequestMapping("/terms")
 public class TermController {
 
-    private static Logger logger = LoggerFactory.getLogger(TermController.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(TermController.class);
+
+    private final TermService termService;
 
     @Autowired
-    private TermService termService;
-
-    @ModelAttribute
-    public void addTermModel(Model model) {
-        Term term = new Term();
-        Term translation = new Term();
-        TermInfo termInfo = new TermInfo();
-        TermInfo translationInfo = new TermInfo();
-
-        TermInfo.TermCommonInfo commonInfo = termInfo.new TermCommonInfo();
-        termInfo.setCommonInfo(commonInfo);
-        translationInfo.setCommonInfo(commonInfo);
-
-        termInfo.setExamples(new ArrayList<String>(1));
-        translationInfo.setExamples(new ArrayList<String>(1));
-
-        translation.setTermInfo(translationInfo);
-        translation.setTranslation(term);
-
-        term.setTermInfo(termInfo);
-        term.setTranslation(translation);
-
-        term.setLang(Lang.RU);
-        translation.setLang(Lang.DE);
-
-        model.addAttribute("term", term);
+    public TermController(TermService termService) {
+        this.termService = termService;
     }
 
-    @ModelAttribute("terms")
-    public List<Term> addTermsModel() {
-        return termService.getTerms(Lang.DE);
+    @ModelAttribute("groups")
+    public List<TermGroup> populateGroups() {
+        return termService.getLastCompletedTermGroups();
     }
 
-    @RequestMapping("/term.html")
-    public String term() {
+    @GetMapping("")
+    public String terms() {
+        return "term/terms";
+    }
+
+    @GetMapping("/term/{groupId}")
+    public String term(@PathVariable Integer groupId, Model model){
+        var group = termService.getTermGroup(groupId).orElseGet(TermGroup::new);
+        var termMap = termService.termGroupToTermMap(group);
+        model.addAttribute("group", group);
+        model.addAttribute("termMap", termMap);
         return "term/term";
     }
 
-    @RequestMapping("/term/edit.html")
-    public String editTerm() {
-        return "term/edit";
-    }
-
-    @RequestMapping(path = "/term/edit/save", method = RequestMethod.POST)
-    public String editTerm(@ModelAttribute("term") Term term) {
-        if (term.getName() != null && term.getTranslation().getName() != null) {// validation
-            termService.saveTerm(term);
-        }
-        return "redirect:/edit.html";
-    }
-
     @ResponseBody
-    @RequestMapping(path = "/term/search", method = RequestMethod.POST)
-    public Map<String, String> searchTerm(@RequestBody Search search) {
-        Map<String, String> map = new HashMap<>(2);
-        if (search.getDeTerm() != null && !search.getDeTerm().isEmpty()) {
-            Term t = termService.getTerm(search.getDeTerm(), Lang.DE);
-            map.put(t.getName(), t.getTranslation().getName());
-        }
-        if (search.getRuTerm() != null && !search.getRuTerm().isEmpty()) {
-            Term t = termService.getTerm(search.getRuTerm(), Lang.RU);
-            map.put(t.getTranslation().getName(), t.getName());
-        }
-        return map;
-    }
-
-    private static class Search {
-
-        private String deTerm;
-        private String ruTerm;
-
-        public Search() {
-
-        }
-
-        public void setDeTerm(String deTerm) {
-            this.deTerm = deTerm;
-        }
-
-        public void setRuTerm(String ruTerm) {
-            this.ruTerm = ruTerm;
-        }
-
-        public String getDeTerm() {
-            return deTerm;
-        }
-
-        public String getRuTerm() {
-            return ruTerm;
-        }
+    @GetMapping("/search")
+    public List<TermGroup> search(@RequestParam("query") String query, @RequestParam("lang") String lang){
+        Lang langEnum = Transform.toLang(lang);
+        var term = termService.getTerm(query, langEnum).orElseGet(Term::new);
+        var termGroup = termService.getTermGroup(term).orElseGet(TermGroup::new);
+        return List.of(termGroup);
     }
 }
+//class

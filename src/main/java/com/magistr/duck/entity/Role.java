@@ -8,9 +8,7 @@ public class Role extends Entity implements Serializable {
 
     private String name;
 
-    public Role() {
-
-    }
+    public Role() {}
 
     public Role(String name) {
         this.name = name;
@@ -26,8 +24,10 @@ public class Role extends Entity implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Role [id=").append(getId()).append(", name=").append(name).append("]");
-        return builder.toString();
+        final StringBuilder sb = new StringBuilder("Role{");
+        sb.append("name='").append(name).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }
+//class
