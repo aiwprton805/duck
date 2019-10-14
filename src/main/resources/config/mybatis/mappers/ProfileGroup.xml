@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magistr.duck.dao.ProfileGroupDao">
+    <!-- ============================== RESULT MAP ============================== -->
+    <resultMap type="ProfileGroup" id="profileGroupResult">
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="token" column="token" />
+        <collection property="profiles" resultMap="profileResult" columnPrefix="p_" />
+    </resultMap>
+
+    <resultMap type="Profile" id="profileResult">
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+    </resultMap>
+
+    <!-- ======================= SELECT ALL PROFILES SQL ======================== -->
+    <sql id="selectAllProfileGroups">
+        SELECT
+            pg.id AS id,
+            pg.name AS name,
+            pg.token AS token,
+            p.id AS p_id,
+            p.name AS p_name
+        FROM duck.profiles_groups pg
+        LEFT JOIN duck.profiles_profiles_groups ppg ON ppg.profile_group_id = pg.id
+        LEFT JOIN duck.profiles p ON ppg.profile_id = p.id
+    </sql>
+
+    <!-- ================================ CREATE ================================ -->
+    <insert id="create" parameterType="ProfileGroup">
+        <selectKey keyProperty="id" keyColumn="id" resultType="int" order="BEFORE">
+            INSERT INTO duck.profiles_groups(name, token)
+            VALUES (#{name}, #{token}) RETURNING id;
+        </selectKey>
+
+        INSERT INTO duck.profiles_profiles_groups(profile_id, profile_group_id) VALUES
+        <foreach collection="profiles" item="profile" separator=",">
+            (#{profile.id}, (#{id}))
+        </foreach>;
+    </insert>
+
+    <!-- ================================= READ ================================= -->
+    <select id="read" parameterType="int" resultMap="profileGroupResult">
+        <include refid="selectAllProfileGroups" />
+        WHERE pg.id = #{id};
+    </select>
+
+    <!-- ================================ UPDATE ================================ -->
+    <update id="update" parameterType="ProfileGroup">
+        UPDATE duck.profiles_groups
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="token != null">token = #{token}</if>
+        </set>
+        WHERE id = #{id};
+    </update>
+
+    <!-- ================================ DELETE ================================ -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM duck.profiles_groups WHERE id = #{id};
+    </delete>
+
+    <!-- ===================== ADD PROFILE TO PROFILE GROUP ===================== -->
+    <insert id="addProfile" parameterType="map">
+        INSERT INTO duck.profiles_profiles_groups(profile_id, profile_group_id)
+        VALUES (#{profileId}, #{groupId});
+    </insert>
+
+    <!-- =================== DELETE PROFILE FROM PROFILE GROUP ================== -->
+    <delete id="deleteProfile" parameterType="map">
+        DELETE FROM duck.profiles_profiles_groups
+        WHERE profile_id = #{profileId} AND profile_group_id = #{groupId};
+    </delete>
+
+    <!-- ============================ FIND BY TOKEN ============================= -->
+    <select id="findByToken" parameterType="string" resultMap="profileGroupResult">
+        <include refid="selectAllProfileGroups" />
+        WHERE pg.token = #{token};
+    </select>
+
+    <!-- ========================== FIND BY PROFILE ID ========================== -->
+    <select id="findByProfileId" parameterType="int" resultMap="profileGroupResult">
+        <include refid="selectAllProfileGroups" />
+        WHERE p.id = #{profileId};
+    </select>
+
+    <!-- =================== FIND BY PROFILE ID AND ROLE NAME =================== -->
+    <select id="findByProfileIdAndRoleName" parameterType="map" resultMap="profileGroupResult">
+        <include refid="selectAllProfileGroups" />
+        LEFT JOIN duck.users u ON u.id = p.user_id
+        WHERE p.id = #{profileId} AND EXISTS(SELECT 1 FROM duck.users_roles
+            WHERE user_id = u.id AND role_id =
+            <choose>
+                <when test="roleName == 'admin'">1</when>
+                <when test="roleName == 'lector'">2</when>
+                <when test="roleName == 'student'">3</when>
+                <when test="roleName == 'guest'">4</when>
+            </choose>);
+    </select>
+</mapper>

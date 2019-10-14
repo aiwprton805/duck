@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+        version="2.1">
+    <tlib-version>2.1</tlib-version>
+    <short-name>f</short-name>
+    <uri>duck.magistr.com/jsp/taglib/functions</uri>
+    
+    <function>
+        <name>termGroupExamples</name>
+        <function-class>com.magistr.duck.common.utils.JspFunctions</function-class>
+        <function-signature>java.util.List termGroupExamples(com.magistr.duck.entity.TermGroup)</function-signature>
+    </function>
+</taglib>
