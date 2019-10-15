@@ -70,7 +70,22 @@
     <!-- ========================== FIND BY USER NAME =========================== -->
     <select id="findByUserName" parameterType="string" resultMap="profileResult">
         <include refid="selectAllProfiles" />
-        LEFT JOIN duck.users u on u.id = p.user_id
-        where u.name = #{userName};
+        LEFT JOIN duck.users u ON u.id = p.user_id
+        WHERE u.name = #{userName};
+    </select>
+
+    <!-- ==================== FIND BY ROLE AND PROFILE GROUP ==================== -->
+    <select id="findByRoleNameAndProfileGroupId" parameterType="map" resultMap="profileResult">
+        <include refid="selectAllProfiles" />
+        LEFT JOIN duck.users_roles ur ON p.user_id = ur.user_id
+        LEFT JOIN duck.profiles_profiles_groups ppg ON p.id = ppg.profile_id
+        WHERE ur.role_id =
+        <choose>
+            <when test="roleName == 'admin'">1</when>
+            <when test="roleName == 'lector'">2</when>
+            <when test="roleName == 'student'">3</when>
+            <when test="roleName == 'guest'">4</when>
+        </choose>
+        AND ppg.profile_group_id = #{profileGroupId};
     </select>
 </mapper>

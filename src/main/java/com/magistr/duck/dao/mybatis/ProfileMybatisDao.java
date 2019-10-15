@@ -4,6 +4,7 @@ import com.magistr.duck.dao.ProfileDao;
 import com.magistr.duck.entity.Profile;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -51,6 +52,12 @@ public class ProfileMybatisDao extends SqlSessionDaoSupport implements ProfileDa
     @Override
     public Optional<Profile> findByUserName(String userName) {
         return Optional.ofNullable(getSqlSession().selectOne(MAPPER_NAMESPACE + ".findByUserName", userName));
+    }
+
+    @Override
+    public List<Profile> findByRoleNameAndProfileGroupId(String roleName, Integer profileGroupId) {
+        return getSqlSession().selectList(MAPPER_NAMESPACE + ".findByRoleNameAndProfileGroupId",
+                Map.of("roleName", roleName, "profileGroupId", profileGroupId));
     }
 }
 //class

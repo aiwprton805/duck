@@ -2,6 +2,7 @@ package com.magistr.duck.service.impl;
 
 import com.magistr.duck.dao.ProfileDao;
 import com.magistr.duck.entity.Profile;
+import com.magistr.duck.entity.ProfileGroup;
 import com.magistr.duck.entity.Term;
 import com.magistr.duck.entity.User;
 import com.magistr.duck.service.ProfileService;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -69,6 +71,32 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public Optional<Profile> getProfile(Principal principal) {
         return profileDao.findByUserName(principal.getName());
+    }
+
+    @Override
+    public List<Profile> getLectorProfiles(Integer profileGroupId) {
+        if(profileGroupId == null){
+            throw new IllegalArgumentException("profileGroupId must be not null");
+        }
+        return profileDao.findByRoleNameAndProfileGroupId("lector", profileGroupId);
+    }
+
+    @Override
+    public List<Profile> getStudentProfiles(Integer profileGroupId) {
+        if(profileGroupId == null){
+            throw new IllegalArgumentException("profileGroupId must be not null");
+        }
+        return profileDao.findByRoleNameAndProfileGroupId("student", profileGroupId);
+    }
+
+    @Override
+    public List<Profile> getLectorProfiles(ProfileGroup profileGroup) {
+        return getLectorProfiles(profileGroup.getId());
+    }
+
+    @Override
+    public List<Profile> getStudentProfiles(ProfileGroup profileGroup) {
+        return getStudentProfiles(profileGroup.getId());
     }
 
     @Override
