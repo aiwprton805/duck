@@ -6,12 +6,7 @@
         <id property="id" column="id" />
         <result property="name" column="name" />
         <result property="token" column="token" />
-        <collection property="profiles" resultMap="profileResult" columnPrefix="p_" />
-    </resultMap>
-
-    <resultMap type="Profile" id="profileResult">
-        <id property="id" column="id" />
-        <result property="name" column="name" />
+        <collection property="profiles" resultMap="com.magistr.duck.dao.ProfileDao.profileResult" columnPrefix="p_" />
     </resultMap>
 
     <!-- ======================= SELECT ALL PROFILES SQL ======================== -->
@@ -21,7 +16,9 @@
             pg.name AS name,
             pg.token AS token,
             p.id AS p_id,
-            p.name AS p_name
+            p.user_id AS p_user_id,
+            p.name AS p_name,
+            p.email AS p_email
         FROM duck.profiles_groups pg
         LEFT JOIN duck.profiles_profiles_groups ppg ON ppg.profile_group_id = pg.id
         LEFT JOIN duck.profiles p ON ppg.profile_id = p.id
