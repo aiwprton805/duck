@@ -154,7 +154,7 @@ public class ProfileRestController {
     @GetMapping("/student/terms/all")
     public List<Term> getAllTerms(Principal principal){
         var profile = profileService.getProfile(principal).orElseGet(Profile::new);
-        return termService.getTerms(profile);
+        return termService.getTerms(profile, TermStatus.PROCESSING);
     }
 
     @GetMapping("/student/groups")
