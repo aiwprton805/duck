@@ -30,7 +30,7 @@
                                          @show-modal="showModal" inline-template>
                             <div class="panel-block">
                                 <span class="panel-icon"><i class="fas fa-users" aria-hidden="true"></i></span>
-                                <a href="#">{{group.name}}</a>
+                                <a :href="groupLink">{{group.name}}</a>
                                 <p class="ml-auto">{{group.token}}</p>
                                 <span class="panel-icon is-right-panel-icon">
                                     <a @click="preDeleteGroup"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>

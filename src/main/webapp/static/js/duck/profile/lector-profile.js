@@ -12,6 +12,11 @@ const groupComponent = {
     props: {
         group: Object
     },
+    computed:{
+        groupLink(){
+            return `${lAppContextUrl}group/${this.group.id}`;
+        }
+    },
     methods: {
         preDeleteGroup() {
             this.$emit('show-modal', this.group);
