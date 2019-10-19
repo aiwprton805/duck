@@ -7,6 +7,7 @@ import com.magistr.duck.entity.Entity;
 import com.magistr.duck.entity.Profile;
 import com.magistr.duck.entity.ProfileGroup;
 import com.magistr.duck.service.ProfileGroupService;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,6 +105,15 @@ public class ProfileGroupServiceImpl implements ProfileGroupService {
     @Override
     public void removeProfile(Profile profile, ProfileGroup group) {
         groupDao.deleteProfile(profile.getId(), group.getId());
+    }
+
+    @Override
+    public String generateToken() {
+        var token = RandomStringUtils.randomAlphanumeric(6);
+        while(groupDao.findByToken(token).isPresent()){
+            token = RandomStringUtils.randomAlphanumeric(6);
+        }
+        return token;
     }
 }
 //class

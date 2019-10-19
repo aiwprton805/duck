@@ -102,7 +102,7 @@ public class ProfileRestController {
     @PostMapping("/lector/group")
     public ProfileGroup saveProfileGroup(@RequestBody Map<String, String> params, Principal principal){
         var profile = profileService.getProfile(principal).orElseGet(Profile::new);
-        var token = RandomStringUtils.randomAlphanumeric(6);
+        var token = profileGroupService.generateToken();
         var profileGroup = new ProfileGroup(params.get("name"), token, List.of(profile));
         profileGroupService.saveProfileGroup(profileGroup);
         return profileGroup;

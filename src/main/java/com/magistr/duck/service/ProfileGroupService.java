@@ -33,4 +33,6 @@ public interface ProfileGroupService {
     void removeProfile(Integer profileId, Integer groupId);
 
     void removeProfile(Profile profile, ProfileGroup group);
+
+    String generateToken();
 }
