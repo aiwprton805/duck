@@ -125,14 +125,14 @@ public class ProfileRestController {
         return termService.getTerms(profile, TermStatus.CHECKING);
     }
 
-    @GetMapping({"/lector/terms/ru", "/student/terms/ru"})
-    public List<Term> getRussianTerms(Principal principal){
+    @GetMapping("/lector/terms/ru")
+    public List<Term> getLectorsRussianTerms(Principal principal){
         var profile = profileService.getProfile(principal).orElseGet(Profile::new);
         return termService.getTerms(profile, Lang.RU);
     }
 
-    @GetMapping({"/lector/terms/de", "/student/terms/de"})
-    public List<Term> getDeutschTerms(Principal principal){
+    @GetMapping("/lector/terms/de")
+    public List<Term> getLectorsDeutschTerms(Principal principal){
         var profile = profileService.getProfile(principal).orElseGet(Profile::new);
         return termService.getTerms(profile, Lang.DE);
     }
@@ -155,6 +155,18 @@ public class ProfileRestController {
     public List<Term> getAllTerms(Principal principal){
         var profile = profileService.getProfile(principal).orElseGet(Profile::new);
         return termService.getTerms(profile, TermStatus.PROCESSING);
+    }
+
+    @GetMapping("/student/terms/ru")
+    public List<Term> getStudentsRussianTerms(Principal principal){
+        var profile = profileService.getProfile(principal).orElseGet(Profile::new);
+        return termService.getTerms(profile, TermStatus.PROCESSING, Lang.RU);
+    }
+
+    @GetMapping("/student/terms/de")
+    public List<Term> getStudentsDeutschTerms(Principal principal){
+        var profile = profileService.getProfile(principal).orElseGet(Profile::new);
+        return termService.getTerms(profile, TermStatus.PROCESSING, Lang.DE);
     }
 
     @GetMapping("/student/groups")
