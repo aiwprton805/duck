@@ -128,13 +128,19 @@ public class ProfileRestController {
     @GetMapping("/lector/terms/ru")
     public List<Term> getLectorsRussianTerms(Principal principal){
         var profile = profileService.getProfile(principal).orElseGet(Profile::new);
-        return termService.getTerms(profile, Lang.RU);
+        return termService.getTerms(profile, Lang.RU)
+                .stream()
+                .filter(term -> term.getStatus().equals(TermStatus.NEW) || term.getStatus().equals(TermStatus.CHECKING))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/lector/terms/de")
     public List<Term> getLectorsDeutschTerms(Principal principal){
         var profile = profileService.getProfile(principal).orElseGet(Profile::new);
-        return termService.getTerms(profile, Lang.DE);
+        return termService.getTerms(profile, Lang.DE)
+                .stream()
+                .filter(term -> term.getStatus().equals(TermStatus.NEW) || term.getStatus().equals(TermStatus.CHECKING))
+                .collect(Collectors.toList());
     }
 
     @PostMapping("/lector/termgroup")
