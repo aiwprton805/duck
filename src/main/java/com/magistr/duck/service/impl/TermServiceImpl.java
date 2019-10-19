@@ -82,6 +82,22 @@ public class TermServiceImpl implements TermService {
     }
 
     @Override
+    public List<Term> getTerms(Integer profileId, TermStatus status, Lang lang) {
+        if(profileId == null || status == null || lang == null){
+            throw new IllegalArgumentException("Arguments must been not null. profileId = " + profileId + " status = " + status + " lang = " + lang);
+        }
+        return termDao.findByProfileIdAndStatusAndLang(profileId, status, lang);
+    }
+
+    @Override
+    public List<Term> getTerms(Profile profile, TermStatus status, Lang lang) {
+        if(profile == null){
+            throw new IllegalArgumentException("Argument profile must been not null.");
+        }
+        return getTerms(profile.getId(), status, lang);
+    }
+
+    @Override
     public Optional<TermGroup> getTermGroup(Integer id) {
         return termGroupDao.read(id);
     }

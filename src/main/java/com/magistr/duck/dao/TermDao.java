@@ -19,5 +19,7 @@ public interface TermDao extends CrudDao<Integer, Term> {
 
     List<Term> findByProfileIdAndLang(Integer profileId, Lang lang);
 
+    List<Term> findByProfileIdAndStatusAndLang(Integer profileId, TermStatus status, Lang lang);
+
     List<Term> findAll();
 }

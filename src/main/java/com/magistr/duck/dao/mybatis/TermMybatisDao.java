@@ -67,6 +67,14 @@ public class TermMybatisDao extends SqlSessionDaoSupport implements TermDao {
     }
 
     @Override
+    public List<Term> findByProfileIdAndStatusAndLang(Integer profileId, TermStatus status, Lang lang) {
+        var statusId = status.ordinal();
+        var langId = lang.ordinal();
+        return getSqlSession().selectList(MAPPER_NAMESPACE + ".findByProfileIdAndStatusAndLang",
+                Map.of("profileId", profileId, "statusId", statusId, "langId", langId));
+    }
+
+    @Override
     public List<Term> findAll() {
         return getSqlSession().selectList(MAPPER_NAMESPACE + ".findAll");
     }

@@ -100,6 +100,13 @@
         WHERE pt.profile_id = #{profileId} AND lng.id = #{langId};
     </select>
 
+    <!-- ======================= FIND BY PROFILE AND LANG ======================= -->
+    <select id="findByProfileIdAndStatusAndLang" parameterType="map" resultMap="termResult">
+        <include refid="selectAllTerms" />
+        LEFT JOIN duck.profiles_terms pt ON pt.term_id = trm.id
+        WHERE pt.profile_id = #{profileId} AND ts.id = #{statusId} AND lng.id = #{langId};
+    </select>
+
     <!-- =============================== FIND ALL =============================== -->
     <select id="findAll" resultMap="termResult">
         <include refid="selectAllTerms" />;

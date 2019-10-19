@@ -46,6 +46,10 @@ public interface TermService {
 
     List<Term> getTerms(Profile profile, Lang lang);
 
+    List<Term> getTerms(Integer profileId, TermStatus status, Lang lang);
+
+    List<Term> getTerms(Profile profile, TermStatus status, Lang lang);
+
     List<TermGroup> getTermGroups();
 
     List<TermGroup> getLastCompletedTermGroups();
