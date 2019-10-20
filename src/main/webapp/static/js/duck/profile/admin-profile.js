@@ -4,7 +4,7 @@ const items = {
     l: 'lectors',
     a: 'all',
     p: 'proposals'
-}
+};
 
 const appContextUrl = document.getElementById('admin-app').getAttribute('app-context-url');
 const appCsrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
