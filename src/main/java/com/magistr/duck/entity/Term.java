@@ -2,6 +2,7 @@ package com.magistr.duck.entity;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 import com.magistr.duck.common.enums.Lang;
 import com.magistr.duck.common.enums.TermStatus;
@@ -96,6 +97,27 @@ public class Term extends Entity implements Serializable {
 
     public void setExamples(List<String> examples) {
         this.examples = examples;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Term term = (Term) o;
+        return Objects.equals(getId(), term.getId()) &&
+                Objects.equals(termGroupId, term.termGroupId) &&
+                lang == term.lang &&
+                status == term.status &&
+                Objects.equals(name, term.name) &&
+                Objects.equals(grammar, term.grammar) &&
+                Objects.equals(area, term.area) &&
+                Objects.equals(description, term.description) &&
+                Objects.equals(examples, term.examples);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(termGroupId, lang, status, name, grammar, area, description, examples);
     }
 
     @Override
