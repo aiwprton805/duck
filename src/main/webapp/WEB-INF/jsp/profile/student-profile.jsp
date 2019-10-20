@@ -23,7 +23,7 @@
         <div class="column">
             <s-groups-panel-component join-group-button-text="${joinGroupLabel}" hide-input-field-button-text="${hideFieldLabel}" inline-template>
                 <div><%--Inline-template components must have exactly one child element--%>
-                    <nav class="panel">
+                    <article class="panel is-info">
                         <p class="panel-heading">${groupsPanelTitle}</p>
                         <s-group-component v-for="group in groups" :key="group.id" :group="group"
                                          @show-modal="showModal" inline-template>
@@ -63,7 +63,7 @@
                                 {{buttonText}}
                             </button>
                         </div>
-                    </nav>
+                    </article>
                     <div class="modal" :class="{'is-active': isLeaveGroupModalActive}">
                         <div class="modal-background"></div>
                         <div class="modal-card is-small-modal">
@@ -85,7 +85,7 @@
         </div>
         <div class="column">
             <s-terms-panel-component inline-template>
-                <nav class="panel">
+                <article class="panel is-info">
                     <p class="panel-heading">${termsPanelTitle}</p>
                     <p class="panel-tabs">
                         <a @click="switchTab('all')" :class="{'is-active': activeTab === 'all'}">${allTermsTabLabel}</a>
@@ -98,7 +98,7 @@
                             <a href="#">{{term.name}}</a>
                         </div>
                     </s-term-component>
-                </nav>
+                </article>
             </s-terms-panel-component>
         </div>
     </div>

@@ -24,7 +24,7 @@
         <div class="column">
             <groups-panel-component add-groups-button-text="${addGroupLabel}" hide-input-field-button-text="${hideFieldLabel}" inline-template>
                 <div><%--Inline-template components must have exactly one child element--%>
-                    <nav class="panel">
+                    <article class="panel is-info">
                         <p class="panel-heading">${groupsPanelTitle}</p>
                         <group-component v-for="group in groups" :key="group.id" :group="group"
                                          @show-modal="showModal" inline-template>
@@ -62,7 +62,7 @@
                                 {{buttonText}}
                             </button>
                         </div>
-                    </nav>
+                    </article>
                     <div class="modal" :class="{'is-active': isRemoveGroupModalActive}">
                         <div class="modal-background"></div>
                         <div class="modal-card is-small-modal">
@@ -84,7 +84,7 @@
         </div>
         <div class="column">
             <terms-panel-component add-terms-button-text="${addTermsLabel}" hide-input-fields-button-text="${hideFieldsLabel}" inline-template>
-                <nav class="panel">
+                <article class="panel is-info">
                     <p class="panel-heading">${termsPanelTitle}</p>
                     <p class="panel-tabs">
                         <a @click="switchTab('new')" :class="{'is-active': activeTab === 'new'}">${newTabLabel}</a>
@@ -127,7 +127,7 @@
                             {{buttonText}}
                         </button>
                     </div>
-                </nav>
+                </article>
             </terms-panel-component>
         </div>
     </div>
