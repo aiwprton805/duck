@@ -7,10 +7,14 @@
 <c:url var="deFlagImgURL" value="/static/img/flag-de.png"/>
 <c:url var="ruFlagImgURL" value="/static/img/flag-ru.png"/>
 
+<spring:message var="studentsLabel" code="group.students"/>
+<spring:message var="selectTermLabel" code="group.select-term"/>
+<spring:message var="termLabel" code="group.term"/>
+
 <%-- MODEL ATTR: profileGroup, lectors, students --%>
 <section id="lector-app" class="section" data-app-context-url="${appContextURL}" data-group-id="${profileGroup.id}">
     <article class="panel is-info">
-        <p class="panel-heading">Studenty</p>
+        <p class="panel-heading">${studentsLabel}</p>
         <c:forEach var="studentProfile" items="${students}">
             <student-component @term-added="excludeTerm" @student-term-excluded="getTerms" :key="${studentProfile.id}"
                                :profile-id="${studentProfile.id}" :terms="terms" inline-template>
@@ -25,12 +29,12 @@
                         </p>
                         <div class="select ml-auto">
                             <select v-model="selectedTermId">
-                                <option disabled value="0">Vyberite termin</option>
+                                <option disabled value="0">${selectTermLabel}</option>
                                 <option v-for="term in terms" :key="term.id" :value="term.id">{{term.name}}</option>
                             </select>
                         </div>
                         <button @click="postAddTerm" class="button is-success" style="margin-left: 0.75em;">
-                            <span>Termin</span>
+                            <span>${termLabel}</span>
                             <span class="icon"><i class="fas fa-plus-circle"></i></span>
                         </button>
                         <span class="panel-icon is-right-panel-icon">

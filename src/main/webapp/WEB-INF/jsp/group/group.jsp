@@ -6,19 +6,23 @@
 
 <c:url var="appContextURL" value="/"/>
 
+<spring:message var="groupLabel" code="group.group"/>
+<spring:message var="accessCodeLabel" code="group.access-code"/>
+<spring:message var="lectorLabel" code="group.lector"/>
+
 <%-- MODEL ATTR: lectors, students, profileGroup --%>
-<ui:html title="title.profile" withNavbar="true">
+<ui:html title="title.group" withNavbar="true">
     <sec:csrfMetaTags/>
     <section class="hero is-primary">
         <div class="hero-body">
             <div class="container">
                 <div class="level">
                     <div class="level-left">
-                            <h1 class="title">Gruppa ${profileGroup.name}</h1>
+                            <h1 class="title">${groupLabel} ${profileGroup.name}</h1>
                     </div>
                     <div class="level-right">
                         <sec:authorize access="hasRole('lector')">
-                            <h1 class="title">Kod dostupa
+                            <h1 class="title">${accessCodeLabel}
                                 <span id="group-token">${profileGroup.token}</span>
                                 <a id="refresh-group-token-link" data-profile-group-id="${profileGroup.id}"
                                    data-app-context-path="${appContextURL}">
@@ -30,7 +34,7 @@
                 </div>
                 <c:forEach var="lector" items="${lectors}">
                     <h2 class="subtitle">
-                        <span>Prepodavatel: ${lector.name}</span>
+                        <span>${lectorLabel} ${lector.name}</span>
                         <a class="is-underline" href="mailto:${lector.email}"><small><em>${lector.email}</em></small></a>
                     </h2>
                 </c:forEach>
