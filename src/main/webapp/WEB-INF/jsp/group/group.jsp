@@ -21,7 +21,7 @@
                             <h1 class="title">${groupLabel} ${profileGroup.name}</h1>
                     </div>
                     <div class="level-right">
-                        <sec:authorize access="hasRole('lector')">
+                        <sec:authorize var="userHasLectorRole" access="hasRole('lector')">
                             <h1 class="title">${accessCodeLabel}
                                 <span id="group-token">${profileGroup.token}</span>
                                 <a id="refresh-group-token-link" data-profile-group-id="${profileGroup.id}"
@@ -41,9 +41,14 @@
             </div>
         </div>
     </section>
-    <sec:authorize access="hasRole('lector')">
+    <c:if test="${userHasLectorRole}">
         <jsp:include page="lector-group.jsp"/>
-    </sec:authorize>
+    </c:if>
+    <c:if test="${not userHasLectorRole}">
+        <sec:authorize access="hasRole('student')" >
+            <jsp:include page="student-group.jsp"/>
+        </sec:authorize>
+    </c:if>
 </ui:html>
 
 <script defer src='<c:url value="/static/js/axios/axios.min.js"/>'></script>
