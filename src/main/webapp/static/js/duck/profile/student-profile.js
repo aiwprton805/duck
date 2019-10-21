@@ -11,6 +11,11 @@ const sGroupComponent = {
     props: {
         group: Object
     },
+    computed:{
+        groupLink(){
+            return `${sAppContextUrl}group/${this.group.id}`;
+        }
+    },
     methods: {
         preLeaveGroup() {
             this.$emit('show-modal', this.group);
