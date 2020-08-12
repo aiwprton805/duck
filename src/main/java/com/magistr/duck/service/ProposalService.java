@@ -1,5 +1,7 @@
 package com.magistr.duck.service;
 
+import com.magistr.duck.common.enums.ProposalStatus;
+import com.magistr.duck.entity.Profile;
 import com.magistr.duck.entity.Proposal;
 
 import java.util.List;
@@ -20,6 +22,10 @@ public interface ProposalService {
     List<Proposal> getProposalsBySubmitterName(String name);
 
     List<Proposal> getProposalsByTermName(String termName);
+
+    List<Proposal> getProposalsByLector(Profile lector);
+
+    List<Proposal> getProposalsByStatus(ProposalStatus status);
 
     List<Proposal> getProposals();
 }

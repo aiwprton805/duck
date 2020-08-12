@@ -1,6 +1,8 @@
 package com.magistr.duck.service.impl;
 
+import com.magistr.duck.common.enums.ProposalStatus;
 import com.magistr.duck.dao.ProposalDao;
+import com.magistr.duck.entity.Profile;
 import com.magistr.duck.entity.Proposal;
 import com.magistr.duck.service.ProposalService;
 import org.slf4j.Logger;
@@ -19,7 +21,7 @@ public class ProposalServiceImpl implements ProposalService {
     private final ProposalDao proposalDao;
 
     @Autowired
-    public ProposalServiceImpl(ProposalDao proposalDao){
+    public ProposalServiceImpl(ProposalDao proposalDao) {
         this.proposalDao = proposalDao;
     }
 
@@ -30,7 +32,7 @@ public class ProposalServiceImpl implements ProposalService {
 
     @Override
     public Optional<Proposal> getProposal(Proposal proposal) {
-        if(proposal == null || proposal.getId() == null){
+        if (proposal == null || proposal.getId() == null) {
             LOGGER.warn("ProposalServiceImpl.getProposal invalid proposal");
             throw new IllegalArgumentException("proposal and proposal.id must be not null");
         }
@@ -39,9 +41,9 @@ public class ProposalServiceImpl implements ProposalService {
 
     @Override
     public void save(Proposal proposal) {
-        if(proposal.getId() == null){
+        if (proposal.getId() == null) {
             proposalDao.create(proposal);
-        }else{
+        } else {
             proposalDao.update(proposal);
         }
     }
@@ -53,7 +55,7 @@ public class ProposalServiceImpl implements ProposalService {
 
     @Override
     public void remove(Proposal proposal) {
-        if(proposal == null || proposal.getId() == null){
+        if (proposal == null || proposal.getId() == null) {
             LOGGER.warn("ProposalServiceImpl.remove invalid proposal");
             throw new IllegalArgumentException("proposal and proposal.id must be not null");
         }
@@ -68,6 +70,24 @@ public class ProposalServiceImpl implements ProposalService {
     @Override
     public List<Proposal> getProposalsByTermName(String termName) {
         return proposalDao.findByTermName(termName);
+    }
+
+    @Override
+    public List<Proposal> getProposalsByLector(Profile lector) {
+        if (lector == null || lector.getId() == null) {
+            LOGGER.warn("ProposalServiceImpl.getProposalsByLector invalid lector");
+            throw new IllegalArgumentException("lector and lector.id must be not null");
+        }
+        return proposalDao.findByLectorId(lector.getId());
+    }
+
+    @Override
+    public List<Proposal> getProposalsByStatus(ProposalStatus status) {
+        if (status == null) {
+            LOGGER.warn("ProposalServiceImpl.getProposalsByStatus invalid status");
+            throw new IllegalArgumentException("status must be not null");
+        }
+        return proposalDao.findByStatus(status);
     }
 
     @Override
