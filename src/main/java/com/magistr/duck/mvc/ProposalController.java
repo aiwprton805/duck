@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import static com.magistr.duck.common.enums.ContentType.*;
@@ -37,17 +37,17 @@ public class ProposalController {
     }
 
     @ModelAttribute("proposals")
-    public List<Proposal> populateProposals(){
+    public List<Proposal> populateProposals() {
         return proposalService.getProposals();
     }
 
     @GetMapping("/add")
-    public String add(){
+    public String add() {
         return "proposal/add";
     }
 
     @GetMapping("{proposalId}")
-    public String proposal(@PathVariable Integer proposalId, Model model){
+    public String proposal(@PathVariable Integer proposalId, Model model) {
         var proposal = proposalService.getProposal(proposalId).orElseGet(Proposal::new);
         model.addAttribute("proposal", proposal);
         return "proposal/proposal";
@@ -69,19 +69,19 @@ public class ProposalController {
                                @RequestParam("patronymic") String patronymic, @RequestParam("mail") String mail,
                                @RequestParam(name = "agree", required = false) String agree) throws IOException {
         Sex sexEnum;
-        if(sex.equals("M")){
+        if (sex.equals("M")) {
             sexEnum = Sex.MALE;
-        } else if(sex.equals("F")){
+        } else if (sex.equals("F")) {
             sexEnum = Sex.FEMALE;
-        } else{
+        } else {
             sexEnum = null;
         }
         ///////NOOOOOOOOOOOOOOOOOOOOOOOOO
-        if(agree.equals("on")){
+        if (agree.equals("on")) {
             System.out.println("User Agree!");
         }
         var proposal = new Proposal(null, ProposalStatus.NEW, lastName, firstName, patronymic, nickname, sexEnum, mail, term, problem,
-                null, contextUrl, null, null, ZonedDateTime.now());
+                null, contextUrl, null, null, OffsetDateTime.now());
         proposalService.save(proposal);
         Path contextPath = fileStorageService.saveOnFS(contextFiles, PROPOSAL_CONTEXT, proposal.getId());
         Path imagePath = fileStorageService.saveOnFS(imageFiles, PROPOSAL_IMG, proposal.getId());

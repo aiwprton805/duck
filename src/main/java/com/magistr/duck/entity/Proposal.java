@@ -4,7 +4,7 @@ import com.magistr.duck.common.enums.ProposalStatus;
 import com.magistr.duck.common.enums.Sex;
 
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 
 public class Proposal extends Entity implements Serializable {
 
@@ -24,12 +24,12 @@ public class Proposal extends Entity implements Serializable {
     private String contextUrl;
     private String imagesPath;
     private String otherDocsPath;
-    private ZonedDateTime created;
+    private OffsetDateTime created;
 
     public Proposal() {
     }
 
-    public Proposal(Integer lectorId, ProposalStatus status, String lastName, String firstName, String patronymic, String nickname, Sex sex, String email, String term, String problem, String contextPath, String contextUrl, String imagesPath, String otherDocsPath, ZonedDateTime created) {
+    public Proposal(Integer lectorId, ProposalStatus status, String lastName, String firstName, String patronymic, String nickname, Sex sex, String email, String term, String problem, String contextPath, String contextUrl, String imagesPath, String otherDocsPath, OffsetDateTime created) {
         this.lectorId = lectorId;
         this.status = status;
         this.lastName = lastName;
@@ -159,11 +159,11 @@ public class Proposal extends Entity implements Serializable {
         this.otherDocsPath = otherDocsPath;
     }
 
-    public ZonedDateTime getCreated() {
+    public OffsetDateTime getCreated() {
         return created;
     }
 
-    public void setCreated(ZonedDateTime created) {
+    public void setCreated(OffsetDateTime created) {
         this.created = created;
     }
 
