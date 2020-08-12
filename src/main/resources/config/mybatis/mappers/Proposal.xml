@@ -4,6 +4,8 @@
     <!-- ============================== RESULT MAP ============================== -->
     <resultMap type="Proposal" id="proposalResult">
         <id property="id" column="id" />
+        <result property="lectorId" column="lector_id" />
+        <result property="status" javaType="com.magistr.duck.common.enums.ProposalStatus" column="proposal_status_id" />
         <result property="lastName" column="last_name" />
         <result property="firstName" column="first_name" />
         <result property="patronymic" column="patronymic" />
@@ -16,12 +18,15 @@
         <result property="contextUrl" column="context_url" />
         <result property="imagesPath" column="images_path" />
         <result property="otherDocsPath" column="other_docs_path" />
+        <result property="created" javaType="java.time.ZonedDateTime" column="created" />
     </resultMap>
 
     <!-- ======================= SELECT ALL PROPOSALS SQL ======================= -->
     <sql id="selectAllProposals">
         SELECT
             p.id AS id,
+            p.lector_id AS lector_id,
+            p.proposal_status_id AS proposal_status_id,
             p.last_name AS last_name,
             p.first_name AS first_name,
             p.patronymic AS patronymic,
@@ -33,18 +38,22 @@
             p.context_path AS context_path,
             p.context_url AS context_url,
             p.images_path AS images_path,
-            p.other_docs_path AS other_docs_path
+            p.other_docs_path AS other_docs_path,
+            p.created AS created
         FROM duck.proposals p
         LEFT JOIN duck.sexs s ON s.id = p.sex_id
+        LEFT JOIN duck.proposals_status ps ON ps.id = p.proposal_status_id
     </sql>
 
     <!-- ================================ CREATE ================================ -->
     <insert id="create" parameterType="Proposal">
         <selectKey keyProperty="id" keyColumn="id" resultType="int" order="BEFORE">
-            INSERT INTO duck.proposals(last_name, first_name, patronymic, nickname, sex_id, email, term,
-                                                 problem, context_path, context_url, images_path, other_docs_path)
-            VALUES (#{lastName}, #{firstName}, #{patronymic}, #{nickname}, #{sex.ordinal}, #{email}, #{term},
-                    #{problem}, #{contextPath}, #{contextUrl}, #{imagesPath}, #{otherDocsPath})
+            INSERT INTO duck.proposals(lector_id, proposal_status_id, last_name, first_name, patronymic, nickname,
+                                        sex_id, email, term, problem, context_path, context_url, images_path,
+                                        other_docs_path, created)
+            VALUES (#{lectorId}, #{status.ordinal}, #{lastName}, #{firstName}, #{patronymic}, #{nickname},
+                    #{sex.ordinal}, #{email}, #{term}, #{problem}, #{contextPath}, #{contextUrl}, #{imagesPath},
+                    #{otherDocsPath}, #{created})
             RETURNING id;
         </selectKey>
     </insert>
@@ -59,6 +68,8 @@
     <update id="update" parameterType="Proposal">
         UPDATE duck.proposals
         <set>
+            lector_id = #{lectorId},
+            <if test="status != null">proposal_status_id = #{status.ordinal},</if>
             last_name = #{lastName},
             first_name = #{firstName},
             patronymic = #{patronymic},
@@ -70,7 +81,8 @@
             context_path = #{contextPath},
             context_url = #{contextUrl},
             images_path = #{imagesPath},
-            other_docs_path = #{otherDocsPath}
+            other_docs_path = #{otherDocsPath},
+            <if test="created != null">created = #{created}</if>
         </set>
         WHERE id = #{id};
     </update>
@@ -97,8 +109,21 @@
         ]]>
     </select>
 
+    <!-- ============================ FIND BY STATUS ============================ -->
+    <select id="findByStatus" parameterType="com.magistr.duck.common.enums.ProposalStatus" resultMap="proposalResult">
+        <include refid="selectAllProposals" />
+        WHERE p.proposal_status_id = #{status.ordinal};
+    </select>
+
+    <!-- =========================== FIND BY LECTOR ID ========================== -->
+    <select id="findByLectorId" parameterType="int" resultMap="proposalResult">
+        <include refid="selectAllProposals" />
+        WHERE p.lector_id = #{lectorId};
+    </select>
+
     <!-- =============================== FIND ALL =============================== -->
     <select id="findAll" resultMap="proposalResult">
-        <include refid="selectAllProposals" />;
+        <include refid="selectAllProposals" />
+        ORDER BY p.created DESC;
     </select>
 </mapper>

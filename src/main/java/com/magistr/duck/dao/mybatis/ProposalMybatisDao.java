@@ -1,5 +1,6 @@
 package com.magistr.duck.dao.mybatis;
 
+import com.magistr.duck.common.enums.ProposalStatus;
 import com.magistr.duck.dao.ProposalDao;
 import com.magistr.duck.entity.Proposal;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
@@ -39,6 +40,16 @@ public class ProposalMybatisDao extends SqlSessionDaoSupport implements Proposal
     @Override
     public List<Proposal> findByTermName(String termName) {
         return getSqlSession().selectList(MAPPER_NAMESPACE + ".findByTermName", termName);
+    }
+
+    @Override
+    public List<Proposal> findByStatus(ProposalStatus status) {
+        return getSqlSession().selectList(MAPPER_NAMESPACE + ".findByStatus", status);
+    }
+
+    @Override
+    public List<Proposal> findByLectorId(Integer lectorId) {
+        return getSqlSession().selectList(MAPPER_NAMESPACE + ".findByLectorId", lectorId);
     }
 
     @Override

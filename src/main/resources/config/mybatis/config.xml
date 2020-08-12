@@ -22,21 +22,10 @@
         <typeAlias alias="Lang"             type="com.magistr.duck.common.enums.Lang" />
         <typeAlias alias="Sex"              type="com.magistr.duck.common.enums.Sex" />
         <typeAlias alias="TermStatus"       type="com.magistr.duck.common.enums.TermStatus" />
+        <typeAlias alias="ProposalStatus"   type="com.magistr.duck.common.enums.ProposalStatus" />
     </typeAliases>
 
     <typeHandlers>
         <typeHandler handler="com.magistr.duck.common.mybatis.TextArrayTypeHandler" />
     </typeHandlers>
-
-    <!--<mappers>
-        <mapper resource="config/mybatis/mappers/User.xml" />
-        <mapper resource="config/mybatis/mappers/Term.xml" />
-        <mapper resource="config/mybatis/mappers/TermGroup.xml" />
-        <mapper resource="config/mybatis/mappers/Comment.xml" />
-        <mapper resource="config/mybatis/mappers/Profile.xml" />
-        <mapper resource="config/mybatis/mappers/ProfileGroup.xml" />
-        <mapper resource="config/mybatis/mappers/UserProfile.xml" />
-        <mapper resource="config/mybatis/mappers/Proposal.xml" />
-        <mapper resource="config/mybatis/mappers/Token.xml" />
-    </mappers>-->
 </configuration>
