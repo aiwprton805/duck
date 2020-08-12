@@ -1,5 +1,6 @@
 package com.magistr.duck.mvc;
 
+import com.magistr.duck.common.enums.ProposalStatus;
 import com.magistr.duck.common.enums.Sex;
 import com.magistr.duck.entity.Proposal;
 import com.magistr.duck.service.FileStorageService;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import static com.magistr.duck.common.enums.ContentType.*;
@@ -78,8 +80,8 @@ public class ProposalController {
         if(agree.equals("on")){
             System.out.println("User Agree!");
         }
-        var proposal = new Proposal(null, lastName, firstName, patronymic, nickname, sexEnum, mail, term, problem,
-                null, contextUrl,null,null);
+        var proposal = new Proposal(null, ProposalStatus.NEW, lastName, firstName, patronymic, nickname, sexEnum, mail, term, problem,
+                null, contextUrl, null, null, ZonedDateTime.now());
         proposalService.save(proposal);
         Path contextPath = fileStorageService.saveOnFS(contextFiles, PROPOSAL_CONTEXT, proposal.getId());
         Path imagePath = fileStorageService.saveOnFS(imageFiles, PROPOSAL_IMG, proposal.getId());

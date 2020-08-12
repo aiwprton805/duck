@@ -1,14 +1,17 @@
 package com.magistr.duck.entity;
 
+import com.magistr.duck.common.enums.ProposalStatus;
 import com.magistr.duck.common.enums.Sex;
 
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 
 public class Proposal extends Entity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer id;
+    private Integer lectorId;
+    private ProposalStatus status;
     private String lastName;
     private String firstName;
     private String patronymic;
@@ -21,14 +24,14 @@ public class Proposal extends Entity implements Serializable {
     private String contextUrl;
     private String imagesPath;
     private String otherDocsPath;
+    private ZonedDateTime created;
 
     public Proposal() {
     }
 
-    public Proposal(Integer id, String lastName, String firstName, String patronymic, String nickname, Sex sex,
-                    String email, String term, String problem, String contextPath, String contextUrl,
-                    String imagesPath, String otherDocsPath) {
-        this.id = id;
+    public Proposal(Integer lectorId, ProposalStatus status, String lastName, String firstName, String patronymic, String nickname, Sex sex, String email, String term, String problem, String contextPath, String contextUrl, String imagesPath, String otherDocsPath, ZonedDateTime created) {
+        this.lectorId = lectorId;
+        this.status = status;
         this.lastName = lastName;
         this.firstName = firstName;
         this.patronymic = patronymic;
@@ -41,16 +44,23 @@ public class Proposal extends Entity implements Serializable {
         this.contextUrl = contextUrl;
         this.imagesPath = imagesPath;
         this.otherDocsPath = otherDocsPath;
+        this.created = created;
     }
 
-    @Override
-    public Integer getId() {
-        return id;
+    public Integer getLectorId() {
+        return lectorId;
     }
 
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
+    public void setLectorId(Integer lectorId) {
+        this.lectorId = lectorId;
+    }
+
+    public ProposalStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ProposalStatus status) {
+        this.status = status;
     }
 
     public String getLastName() {
@@ -149,24 +159,34 @@ public class Proposal extends Entity implements Serializable {
         this.otherDocsPath = otherDocsPath;
     }
 
+    public ZonedDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(ZonedDateTime created) {
+        this.created = created;
+    }
+
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Proposal{");
-        sb.append("id=").append(id);
-        sb.append(", lastName='").append(lastName).append('\'');
-        sb.append(", firstName='").append(firstName).append('\'');
-        sb.append(", patronymic='").append(patronymic).append('\'');
-        sb.append(", nickname='").append(nickname).append('\'');
-        sb.append(", sex=").append(sex);
-        sb.append(", email='").append(email).append('\'');
-        sb.append(", term='").append(term).append('\'');
-        sb.append(", problem='").append(problem).append('\'');
-        sb.append(", contextPath='").append(contextPath).append('\'');
-        sb.append(", contextUrl='").append(contextUrl).append('\'');
-        sb.append(", imagesPath='").append(imagesPath).append('\'');
-        sb.append(", otherDocsPath='").append(otherDocsPath).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return "Proposal{" +
+                "id=" + getId() +
+                ", lectorId=" + lectorId +
+                ", status=" + status +
+                ", lastName='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", patronymic='" + patronymic + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", sex=" + sex +
+                ", email='" + email + '\'' +
+                ", term='" + term + '\'' +
+                ", problem='" + problem + '\'' +
+                ", contextPath='" + contextPath + '\'' +
+                ", contextUrl='" + contextUrl + '\'' +
+                ", imagesPath='" + imagesPath + '\'' +
+                ", otherDocsPath='" + otherDocsPath + '\'' +
+                ", created=" + created +
+                '}';
     }
 }
 //class
