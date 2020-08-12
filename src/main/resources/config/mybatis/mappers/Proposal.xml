@@ -18,7 +18,7 @@
         <result property="contextUrl" column="context_url" />
         <result property="imagesPath" column="images_path" />
         <result property="otherDocsPath" column="other_docs_path" />
-        <result property="created" javaType="java.time.ZonedDateTime" column="created" />
+        <result property="created" javaType="java.time.OffsetDateTime" column="created" />
     </resultMap>
 
     <!-- ======================= SELECT ALL PROPOSALS SQL ======================= -->
@@ -26,7 +26,7 @@
         SELECT
             p.id AS id,
             p.lector_id AS lector_id,
-            p.proposal_status_id AS proposal_status_id,
+            ps.name AS proposal_status_id,
             p.last_name AS last_name,
             p.first_name AS first_name,
             p.patronymic AS patronymic,
