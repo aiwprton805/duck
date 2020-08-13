@@ -44,7 +44,7 @@ public class ProposalMybatisDao extends SqlSessionDaoSupport implements Proposal
 
     @Override
     public List<Proposal> findByStatus(ProposalStatus status) {
-        return getSqlSession().selectList(MAPPER_NAMESPACE + ".findByStatus", status);
+        return getSqlSession().selectList(MAPPER_NAMESPACE + ".findByStatus", status.ordinal());
     }
 
     @Override

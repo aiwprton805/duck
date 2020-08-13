@@ -110,9 +110,9 @@
     </select>
 
     <!-- ============================ FIND BY STATUS ============================ -->
-    <select id="findByStatus" parameterType="com.magistr.duck.common.enums.ProposalStatus" resultMap="proposalResult">
+    <select id="findByStatus" parameterType="int" resultMap="proposalResult">
         <include refid="selectAllProposals" />
-        WHERE p.proposal_status_id = #{status.ordinal};
+        WHERE p.proposal_status_id = #{status};
     </select>
 
     <!-- =========================== FIND BY LECTOR ID ========================== -->
