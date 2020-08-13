@@ -31,7 +31,8 @@ public class ProposalRestController {
     @GetMapping("/proposals/start/{start}/length/{length}")
     public Map<String, Object> getProposals(@PathVariable Integer start,
                                             @PathVariable Integer length,
-                                            Authentication authentication) {
+                                            Authentication authentication,
+                                            Principal principal) {
         List<String> roles = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
@@ -39,8 +40,7 @@ public class ProposalRestController {
         List<Proposal> proposals;
         if (roles.contains("admin") && roles.contains("lector")) {
             proposals = proposalService.getProposalsByStatus(ProposalStatus.NEW);
-            proposals.addAll(proposalService.getProposalsByLector(profileService.getProfile(
-                    (Principal) authentication.getPrincipal()).orElseGet(Profile::new)));
+            proposals.addAll(proposalService.getProposalsByLector(profileService.getProfile(principal).orElseGet(Profile::new)));
         } else if (roles.contains("admin")) {
             proposals = proposalService.getProposalsByStatus(ProposalStatus.NEW);
         } else if (roles.contains("lector")) {
