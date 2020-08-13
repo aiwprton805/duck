@@ -19,6 +19,8 @@ public interface ProposalService {
 
     void remove(Proposal proposal);
 
+    void bindProposalToLector(Integer proposalId, Integer lectorId);
+
     List<Proposal> getProposalsBySubmitterName(String name);
 
     List<Proposal> getProposalsByTermName(String termName);

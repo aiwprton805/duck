@@ -53,5 +53,11 @@ public class ProposalRestController {
         return Map.of("data", proposals.stream().skip(start).limit(length).collect(Collectors.toList()),
                 "size", proposalsSize);
     }
+
+    @PostMapping("/proposal/{proposalId}/bind-to-lector/{lectorProfileId}")
+    public void bindProposalToLector(@PathVariable Integer proposalId,
+                                     @PathVariable Integer lectorProfileId) {
+        proposalService.bindProposalToLector(proposalId, lectorProfileId);
+    }
 }
 //class
