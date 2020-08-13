@@ -9,63 +9,63 @@ import org.springframework.context.annotation.Configuration;
 public class MainConfiguration {
 
     @Bean
-    public CommentMybatisDao commentMybatisDao(SqlSessionFactory sqlSessionFactory){
+    public CommentMybatisDao commentMybatisDao(SqlSessionFactory sqlSessionFactory) {
         var dao = new CommentMybatisDao();
         dao.setSqlSessionFactory(sqlSessionFactory);
         return dao;
     }
 
     @Bean
-    public ProfileGroupMybatisDao profileGroupMybatisDao(SqlSessionFactory sqlSessionFactory){
+    public ProfileGroupMybatisDao profileGroupMybatisDao(SqlSessionFactory sqlSessionFactory) {
         var dao = new ProfileGroupMybatisDao();
         dao.setSqlSessionFactory(sqlSessionFactory);
         return dao;
     }
 
     @Bean
-    public ProfileMybatisDao profileMybatisDao(SqlSessionFactory sqlSessionFactory){
+    public ProfileMybatisDao profileMybatisDao(SqlSessionFactory sqlSessionFactory) {
         var dao = new ProfileMybatisDao();
         dao.setSqlSessionFactory(sqlSessionFactory);
         return dao;
     }
 
     @Bean
-    public ProposalMybatisDao proposalMybatisDao(SqlSessionFactory sqlSessionFactory){
+    public ProposalMybatisDao proposalMybatisDao(SqlSessionFactory sqlSessionFactory) {
         var dao = new ProposalMybatisDao();
         dao.setSqlSessionFactory(sqlSessionFactory);
         return dao;
     }
 
     @Bean
-    public TermGroupMybatisDao termGroupMybatisDao(SqlSessionFactory sqlSessionFactory){
+    public TermGroupMybatisDao termGroupMybatisDao(SqlSessionFactory sqlSessionFactory) {
         var dao = new TermGroupMybatisDao();
         dao.setSqlSessionFactory(sqlSessionFactory);
         return dao;
     }
 
     @Bean
-    public TermMybatisDao termMybatisDao(SqlSessionFactory sqlSessionFactory){
+    public TermMybatisDao termMybatisDao(SqlSessionFactory sqlSessionFactory) {
         var dao = new TermMybatisDao();
         dao.setSqlSessionFactory(sqlSessionFactory);
         return dao;
     }
 
     @Bean
-    public TokenMybatisDao tokenMybatisDao(SqlSessionFactory sqlSessionFactory){
+    public TokenMybatisDao tokenMybatisDao(SqlSessionFactory sqlSessionFactory) {
         var dao = new TokenMybatisDao();
         dao.setSqlSessionFactory(sqlSessionFactory);
         return dao;
     }
 
     @Bean
-    public UserMybatisDao userMybatisDao(SqlSessionFactory sqlSessionFactory){
+    public UserMybatisDao userMybatisDao(SqlSessionFactory sqlSessionFactory) {
         var dao = new UserMybatisDao();
         dao.setSqlSessionFactory(sqlSessionFactory);
         return dao;
     }
 
     @Bean
-    public UserProfileMybatisDao userProfileMybatisDao(SqlSessionFactory sqlSessionFactory){
+    public UserProfileMybatisDao userProfileMybatisDao(SqlSessionFactory sqlSessionFactory) {
         var dao = new UserProfileMybatisDao();
         dao.setSqlSessionFactory(sqlSessionFactory);
         return dao;

@@ -18,7 +18,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     /* ************************************ I18N ************************************* */
     @Bean
-    public MessageSource messageSource(){
+    public MessageSource messageSource() {
         var messageSource = new ResourceBundleMessageSource();
         messageSource.setBasename("config.locale.messages");
         messageSource.setDefaultEncoding("UTF-8");
@@ -26,16 +26,16 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public LocaleResolver localeResolver(){
+    public LocaleResolver localeResolver() {
         var localeResolver = new CookieLocaleResolver();
         localeResolver.setCookieName("LOCALE");
-        localeResolver.setCookieMaxAge(60*60*24*31);
+        localeResolver.setCookieMaxAge(60 * 60 * 24 * 31);
         localeResolver.setDefaultLocale(Locale.forLanguageTag("ru"));
         return localeResolver;
     }
 
     @Bean
-    public LocaleChangeInterceptor localeChangeInterceptor(){
+    public LocaleChangeInterceptor localeChangeInterceptor() {
         var interceptor = new LocaleChangeInterceptor();
         interceptor.setParamName("language");
         return interceptor;

@@ -5,23 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
-import org.springframework.security.access.vote.AffirmativeBased;
-import org.springframework.security.access.vote.AuthenticatedVoter;
-import org.springframework.security.access.vote.RoleVoter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
-import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy;
@@ -54,32 +48,32 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login*/**", "/registration*/**").anonymous()
                 //.antMatchers("/**").hasAnyRole("admin", "lector", "student", "guest")
                 .anyRequest().authenticated()
-            .and()
-            .formLogin()
+                .and()
+                .formLogin()
                 .loginPage("/login").loginProcessingUrl("/login/signin").failureForwardUrl("/login?error-true")
                 .defaultSuccessUrl("/profile").usernameParameter("name").passwordParameter("password")
-            .and()
-            .logout()
+                .and()
+                .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/index")
                 .deleteCookies("JSESSIONID")
-            .and()
-            .anonymous()
-            .and()
-            .csrf()
+                .and()
+                .anonymous()
+                .and()
+                .csrf()
                 .csrfTokenRepository(new CookieCsrfTokenRepository())
-            .and()
-            .exceptionHandling()
+                .and()
+                .exceptionHandling()
                 .accessDeniedPage("/error/access_denied")
-            .and()
-            .rememberMe()
+                .and()
+                .rememberMe()
                 .rememberMeParameter("rememberMe")
-                .tokenValiditySeconds(60*60*24*31)
+                .tokenValiditySeconds(60 * 60 * 24 * 31)
                 .tokenRepository(jdbcTokenRepository());
         http
-            .addFilterAt(concurrencyFilter(), ConcurrentSessionFilter.class)
-            .addFilterAt(myAuthFilter(), UsernamePasswordAuthenticationFilter.class)
-            .sessionManagement()
+                .addFilterAt(concurrencyFilter(), ConcurrentSessionFilter.class)
+                .addFilterAt(myAuthFilter(), UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement()
                 .sessionAuthenticationStrategy(sas());
     }
 
@@ -97,17 +91,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(){
+    public UserDetailsService userDetailsService() {
         return new UserDetailsServiceImpl();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public JdbcTokenRepositoryImpl jdbcTokenRepository(){
+    public JdbcTokenRepositoryImpl jdbcTokenRepository() {
         var repository = new JdbcTokenRepositoryImpl();
         repository.setDataSource(dataSource);
         return repository;
@@ -120,12 +114,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public SessionInformationExpiredStrategy sessionInformationExpiredStrategy(){
+    public SessionInformationExpiredStrategy sessionInformationExpiredStrategy() {
         return new SimpleRedirectSessionInformationExpiredStrategy("/login");
     }
 
     @Bean
-    public ConcurrentSessionFilter concurrencyFilter(){
+    public ConcurrentSessionFilter concurrencyFilter() {
         return new ConcurrentSessionFilter(sessionRegistry(), sessionInformationExpiredStrategy());
     }
 
@@ -138,30 +132,30 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public CompositeSessionAuthenticationStrategy sas(){
+    public CompositeSessionAuthenticationStrategy sas() {
         return new CompositeSessionAuthenticationStrategy(List.of(concurrentSessionControlAuthenticationStrategy(),
                 sessionFixationProtectionStrategy(), registerSessionAuthenticationStrategy()));
     }
 
     @Bean
-    public ConcurrentSessionControlAuthenticationStrategy concurrentSessionControlAuthenticationStrategy(){
+    public ConcurrentSessionControlAuthenticationStrategy concurrentSessionControlAuthenticationStrategy() {
         var strategy = new ConcurrentSessionControlAuthenticationStrategy(sessionRegistry());
         strategy.setMaximumSessions(-1);
         return strategy;
     }
 
     @Bean
-    public SessionFixationProtectionStrategy sessionFixationProtectionStrategy(){
+    public SessionFixationProtectionStrategy sessionFixationProtectionStrategy() {
         return new SessionFixationProtectionStrategy();
     }
 
     @Bean
-    public RegisterSessionAuthenticationStrategy registerSessionAuthenticationStrategy(){
+    public RegisterSessionAuthenticationStrategy registerSessionAuthenticationStrategy() {
         return new RegisterSessionAuthenticationStrategy(sessionRegistry());
     }
 
     @Bean
-    public SessionRegistry sessionRegistry(){
+    public SessionRegistry sessionRegistry() {
         return new SessionRegistryImpl();
     }
 
