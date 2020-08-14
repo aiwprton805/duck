@@ -78,7 +78,7 @@ public class ProposalServiceImpl implements ProposalService {
         }
         var lectorProfile = profileService.getProfile(lectorId).orElseGet(Profile::new);
         var lectorUser = userService.getUser(lectorProfile.getUserId()).orElseGet(User::new);
-        if (lectorUser.getRoles().stream().map(Role::getName).anyMatch(role -> role.equals("lector"))) {
+        if (lectorUser.getRoles().stream().map(Role::getName).noneMatch(role -> role.equals("lector"))) {
             LOGGER.warn("ProposalServiceImpl.bindProposalToLector invalid lectorId");
             throw new IllegalStateException("User with profile_id = " + lectorId + " must have 'lector' role");
         }
