@@ -54,7 +54,7 @@ public class ProposalRestController {
                 "size", proposalsSize);
     }
 
-    @PostMapping("/proposal/{proposalId}/bind-to-lector/{lectorProfileId}")
+    @PostMapping("/{proposalId}/bind-to-lector/{lectorProfileId}")
     public void bindProposalToLector(@PathVariable Integer proposalId,
                                      @PathVariable Integer lectorProfileId) {
         proposalService.bindProposalToLector(proposalId, lectorProfileId);
