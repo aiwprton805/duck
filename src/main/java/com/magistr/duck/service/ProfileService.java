@@ -1,5 +1,6 @@
 package com.magistr.duck.service;
 
+import com.magistr.duck.dto.LectorProfile;
 import com.magistr.duck.entity.Profile;
 import com.magistr.duck.entity.ProfileGroup;
 import com.magistr.duck.entity.Term;
@@ -22,6 +23,8 @@ public interface ProfileService {
     Optional<Profile> getProfile(User user);
 
     Optional<Profile> getProfile(Principal principal);
+
+    List<LectorProfile> getLectorProfiles();
 
     List<Profile> getLectorProfiles(Integer profileGroupId);
 

@@ -70,4 +70,11 @@ public class MainConfiguration {
         dao.setSqlSessionFactory(sqlSessionFactory);
         return dao;
     }
+
+    @Bean
+    public LectorProfileMybatisDao lectorProfileMybatisDao(SqlSessionFactory sqlSessionFactory) {
+        var dao = new LectorProfileMybatisDao();
+        dao.setSqlSessionFactory(sqlSessionFactory);
+        return dao;
+    }
 }

@@ -1,6 +1,7 @@
 package com.magistr.duck.mvc;
 
 import com.magistr.duck.common.enums.ProposalStatus;
+import com.magistr.duck.dto.LectorProfile;
 import com.magistr.duck.entity.Profile;
 import com.magistr.duck.entity.Proposal;
 import com.magistr.duck.service.ProfileService;
@@ -52,6 +53,11 @@ public class ProposalRestController {
         Integer proposalsSize = proposals.size();
         return Map.of("data", proposals.stream().skip(start).limit(length).collect(Collectors.toList()),
                 "size", proposalsSize);
+    }
+
+    @GetMapping("/lectors")
+    public List<LectorProfile> getLectors() {
+        return profileService.getLectorProfiles();
     }
 
     @PostMapping("/{proposalId}/bind-to-lector/{lectorProfileId}")

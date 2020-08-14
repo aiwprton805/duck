@@ -1,6 +1,8 @@
 package com.magistr.duck.service.impl;
 
+import com.magistr.duck.dao.LectorProfileDao;
 import com.magistr.duck.dao.ProfileDao;
+import com.magistr.duck.dto.LectorProfile;
 import com.magistr.duck.entity.Profile;
 import com.magistr.duck.entity.ProfileGroup;
 import com.magistr.duck.entity.Term;
@@ -22,11 +24,13 @@ public class ProfileServiceImpl implements ProfileService {
     private final static Logger LOGGER = LoggerFactory.getLogger(ProfileServiceImpl.class);
 
     private final ProfileDao profileDao;
+    private final LectorProfileDao lectorProfileDao;
     private final UserService userService;
 
     @Autowired
-    public ProfileServiceImpl(ProfileDao profileDao, UserService userService) {
+    public ProfileServiceImpl(ProfileDao profileDao, LectorProfileDao lectorProfileDao, UserService userService) {
         this.profileDao = profileDao;
+        this.lectorProfileDao = lectorProfileDao;
         this.userService = userService;
     }
 
@@ -37,10 +41,10 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public void addTerm(Profile profile, Term term) {
-        if(profile.getId() == null || term.getId() == null){
+        if (profile.getId() == null || term.getId() == null) {
             LOGGER.warn("ProfileServiceImpl.addTerm didn't add the term");
             throw new IllegalArgumentException("profile.id and term.id must be not null");
-        }else{
+        } else {
             profileDao.addTerm(profile.getId(), term.getId());
         }
     }
@@ -58,11 +62,11 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public Optional<Profile> getProfile(User user) {
         Optional<Profile> result;
-        if(user.getId() != null){
+        if (user.getId() != null) {
             result = profileDao.findByUserId(user.getId());
-        }else if(user.getName() != null){
+        } else if (user.getName() != null) {
             result = profileDao.findByUserName(user.getName());
-        }else{
+        } else {
             result = Optional.empty();
         }
         return result;
@@ -74,8 +78,13 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
+    public List<LectorProfile> getLectorProfiles() {
+        return lectorProfileDao.findAll();
+    }
+
+    @Override
     public List<Profile> getLectorProfiles(Integer profileGroupId) {
-        if(profileGroupId == null){
+        if (profileGroupId == null) {
             throw new IllegalArgumentException("profileGroupId must be not null");
         }
         return profileDao.findByRoleNameAndProfileGroupId("lector", profileGroupId);
@@ -83,7 +92,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public List<Profile> getStudentProfiles(Integer profileGroupId) {
-        if(profileGroupId == null){
+        if (profileGroupId == null) {
             throw new IllegalArgumentException("profileGroupId must be not null");
         }
         return profileDao.findByRoleNameAndProfileGroupId("student", profileGroupId);
@@ -101,13 +110,13 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public void saveProfile(Profile profile, Principal principal) {
-        if(profile.getUserId() == null){
+        if (profile.getUserId() == null) {
             var user = userService.getUser(principal.getName()).orElseGet(User::new);
             profile.setUserId(user.getId());
         }
-        if(profile.getId() == null){
+        if (profile.getId() == null) {
             profileDao.create(profile);
-        }else{
+        } else {
             profileDao.update(profile);
         }
     }
@@ -129,10 +138,10 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public void removeTerm(Profile profile, Term term) {
-        if(profile.getId() == null || term.getId() == null){
+        if (profile.getId() == null || term.getId() == null) {
             LOGGER.warn("ProfileServiceImpl.removeTerm didn't remove the term");
             throw new IllegalArgumentException("profile.id and term.id must be not null");
-        }else{
+        } else {
             profileDao.deleteTerm(profile.getId(), term.getId());
         }
     }

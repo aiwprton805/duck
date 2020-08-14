@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.magistr.duck.dao.LectorProfileDao">
+    <!-- ============================== RESULT MAP ============================== -->
+    <resultMap type="LectorProfile" id="lectorProfileResult">
+        <result property="proposalCount" column="proposal_count" />
+        <association property="profile" javaType="Profile" resultMap="com.magistr.duck.dao.ProfileDao.profileResult" />
+    </resultMap>
+
+    <!-- ==================== SELECT ALL LECTOR PROFILES SQL ==================== -->
+    <sql id="selectAllLectorProfiles">
+        SELECT p.id, p.user_id, p.name, p.email,
+        (SELECT COUNT(*) FROM duck.proposals pr WHERE pr.lector_id = u.id)::integer as proposal_count
+        FROM duck.profiles p
+        LEFT JOIN duck.users u ON p.user_id = u.id
+        LEFT JOIN duck.users_roles ur ON u.id = ur.user_id
+    </sql>
+
+    <!-- =============================== FIND ALL =============================== -->
+    <select id="findAll" resultMap="lectorProfileResult">
+        <include refid="selectAllLectorProfiles" />
+        WHERE ur.role_id = 2 /*lector role*/
+        ORDER BY p.name;
+    </select>
+</mapper>
