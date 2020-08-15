@@ -65,3 +65,26 @@
             }
 }
 /*spinner*/
+
+/*notification*/
+.custom-notice {
+    position: fixed;
+    left: 50%;
+    bottom: 0.25rem;
+    width: calc(100% - 1.5rem);
+    transform: translateX(-50%);
+}
+.custom-notice .content {
+    text-align: center;
+}
+@media screen and (min-width: 769px), print{
+    .custom-notice {
+        position: fixed;
+        bottom: 0.25rem;
+        right: 0.75rem;
+        left: auto;
+        width: 14rem;
+        transform: none;
+    }
+}
+/*notification*/
