@@ -71,6 +71,11 @@ public class ProposalServiceImpl implements ProposalService {
     }
 
     @Override
+    public void removeAllWithRejectedAndProcessedStatuses() {
+        proposalDao.deleteRejectedAndProcessed();
+    }
+
+    @Override
     public void bindProposalToLector(Integer proposalId, Integer lectorId) {
         if (proposalId == null || lectorId == null) {
             LOGGER.warn("ProposalServiceImpl.bindProposalToLector invalid proposalId or lectorId");

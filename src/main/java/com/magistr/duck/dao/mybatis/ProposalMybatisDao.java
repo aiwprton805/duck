@@ -33,6 +33,11 @@ public class ProposalMybatisDao extends SqlSessionDaoSupport implements Proposal
     }
 
     @Override
+    public void deleteRejectedAndProcessed() {
+        getSqlSession().delete(MAPPER_NAMESPACE + ".deleteRejectedAndProcessed");
+    }
+
+    @Override
     public List<Proposal> findByAnyName(String name) {
         return getSqlSession().selectList(MAPPER_NAMESPACE + ".findByAnyName", name);
     }

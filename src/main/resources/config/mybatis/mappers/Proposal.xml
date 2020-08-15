@@ -92,6 +92,12 @@
         DELETE FROM duck.proposals WHERE id = #{id};
     </delete>
 
+    <!-- ===================== DELETE REJECTED AND PROCESSED ==================== -->
+    <delete id="deleteRejectedAndProcessed">
+        DELETE FROM duck.proposals
+        WHERE proposal_status_id IN (2, 3) /*REJECTED and PROCESSED*/;
+    </delete>
+
     <!-- ======== FIND BY FIRSTNAME OR LASTNAME OR PATRONYMIC OR NICKNAME ======= -->
     <select id="findByAnyName" parameterType="string" resultMap="proposalResult">
         <include refid="selectAllProposals" />

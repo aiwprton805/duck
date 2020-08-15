@@ -19,6 +19,8 @@ public interface ProposalService {
 
     void remove(Proposal proposal);
 
+    void removeAllWithRejectedAndProcessedStatuses();
+
     void bindProposalToLector(Integer proposalId, Integer lectorId);
 
     List<Proposal> getProposalsBySubmitterName(String name);
