@@ -65,5 +65,21 @@ public class ProposalRestController {
                                      @PathVariable Integer lectorProfileId) {
         proposalService.bindProposalToLector(proposalId, lectorProfileId);
     }
+
+    @PostMapping("/proposalId/reject")
+    public void rejectProposal(@PathVariable Integer proposalId){
+        var proposal = proposalService.getProposal(proposalId)
+                .orElseThrow(() -> new IllegalArgumentException("Proposal with id = " + proposalId + " does not exist"));
+        proposal.setStatus(ProposalStatus.REJECTED);
+        proposalService.save(proposal);
+    }
+
+    @PostMapping("/proposalId/done")
+    public void doneProposal(@PathVariable Integer proposalId){
+        var proposal = proposalService.getProposal(proposalId)
+                .orElseThrow(() -> new IllegalArgumentException("Proposal with id = " + proposalId + " does not exist"));
+        proposal.setStatus(ProposalStatus.PROCESSED);
+        proposalService.save(proposal);
+    }
 }
 //class
