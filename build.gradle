@@ -1,13 +1,13 @@
 plugins {
-    id 'org.springframework.boot' version '2.3.2.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'org.springframework.boot' version '2.6.2'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
     id 'war'
 }
 
 group = 'com.magistr'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = '17'
 
 configurations {
     developmentOnly
@@ -26,7 +26,7 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.3'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'org.postgresql:postgresql'
@@ -35,8 +35,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
-    providedRuntime group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper', version: '9.0.37'
-    compile group: 'javax.servlet', name: 'jstl', version: '1.2'
-    compile group: 'org.springframework.security', name: 'spring-security-taglibs', version: '5.3.4.RELEASE'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+    providedRuntime group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper', version: '9.0.56'
+    implementation group: 'javax.servlet', name: 'jstl', version: '1.2'
+    implementation group: 'org.springframework.security', name: 'spring-security-taglibs', version: '5.6.1'
 }
